@@ -5,6 +5,7 @@ import org.chemax.request.PostCreateRequest;
 import org.chemax.request.PostUpdateRequest;
 
 public interface PostService {
+
     void createPost(PostCreateRequest postCreateRequest);
 
     PostDTO getPostById(Long postId);

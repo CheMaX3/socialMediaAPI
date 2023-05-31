@@ -24,17 +24,20 @@ public class User {
     @Transient
     private String passwordConfirm;
 
-//    @OneToMany(mappedBy = "user")
-//    private List<Friend> friendList;
+    @Transient
+    private List<Friend> friendList;
 
-//    @OneToMany(mappedBy = "user")
-//    private List<Subscriber> subscribers;
-//
-//    @OneToMany(mappedBy = "user")
-//    private List<Subscribed> subscribed;
+    @Transient
+    private List<Subscriber> subscribersList;
 
-//    @OneToMany(mappedBy = "requester")
-//    private List<FriendshipInvite> friendshipInvites;
+    @Transient
+    private List<Subscribed> subscribedList;
+
+    @Transient
+    private List<FriendshipInvite> friendshipInvitesList;
+
+    @Transient
+    private List<Post> posts;
 
     public Long getUserId() {
         return userId;
@@ -76,35 +79,43 @@ public class User {
         this.passwordConfirm = passwordConfirm;
     }
 
-//    public List<Friend> getFriendList() {
-//        return friendList;
-//    }
-//
-//    public void setFriendList(List<Friend> friendList) {
-//        this.friendList = friendList;
-//    }
+    public List<Friend> getFriendList() {
+        return friendList;
+    }
 
-//    public List<Subscriber> getSubscribers() {
-//        return subscribers;
-//    }
-//
-//    public void setSubscribers(List<Subscriber> subscribers) {
-//        this.subscribers = subscribers;
-//    }
-//
-//    public List<Subscribed> getSubscribed() {
-//        return subscribed;
-//    }
-//
-//    public void setSubscribed(List<Subscribed> subscribed) {
-//        this.subscribed = subscribed;
-//    }
+    public void setFriendList(List<Friend> friendList) {
+        this.friendList = friendList;
+    }
 
-//    public List<FriendshipInvite> getFriendshipInvites() {
-//        return friendshipInvites;
-//    }
-//
-//    public void setFriendshipInvites(List<FriendshipInvite> friendshipInvites) {
-//        this.friendshipInvites = friendshipInvites;
-//    }
+    public List<Subscriber> getSubscribersList() {
+        return subscribersList;
+    }
+
+    public void setSubscribersList(List<Subscriber> subscribersList) {
+        this.subscribersList = subscribersList;
+    }
+
+    public List<Subscribed> getSubscribedList() {
+        return subscribedList;
+    }
+
+    public void setSubscribedList(List<Subscribed> subscribedList) {
+        this.subscribedList = subscribedList;
+    }
+
+    public List<FriendshipInvite> getFriendshipInvitesList() {
+        return friendshipInvitesList;
+    }
+
+    public void setFriendshipInvitesList(List<FriendshipInvite> friendshipInvitesList) {
+        this.friendshipInvitesList = friendshipInvitesList;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
 }

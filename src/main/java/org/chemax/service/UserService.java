@@ -9,6 +9,7 @@ import org.chemax.request.UserUpdateRequest;
 import java.util.List;
 
 public interface UserService {
+
     void createUser(UserCreateRequest userCreateRequest);
 
     UserDTO getUserById(Long userId);

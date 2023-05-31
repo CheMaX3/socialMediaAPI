@@ -1,17 +1,21 @@
 package org.chemax.request;
 
-import org.chemax.entity.User;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.ZonedDateTime;
+import java.util.Map;
 
 public class PostCreateRequest {
 
     private String header;
     private String message;
-    private String filePath;
     private ZonedDateTime creationDateTime;
     private ZonedDateTime updatedDateTime;
-    private User author;
+    @Value("${upload.path}")
+    private String uploadPath;
+    private Long authorId;
+    private Map<String, MultipartFile> files;
 
     public String getHeader() {
         return header;
@@ -27,14 +31,6 @@ public class PostCreateRequest {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
     }
 
     public ZonedDateTime getCreationDateTime() {
@@ -53,12 +49,20 @@ public class PostCreateRequest {
         this.updatedDateTime = updatedDateTime;
     }
 
-    public User getAuthor() {
-        return author;
+    public Long getAuthorId() {
+        return authorId;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
+
+    public Map<String, MultipartFile> getFiles() {
+        return files;
+    }
+
+    public void setFiles(Map<String, MultipartFile> files) {
+        this.files = files;
     }
 
     @Override
@@ -66,10 +70,10 @@ public class PostCreateRequest {
         return "PostCreateRequest{" +
                 "header='" + header + '\'' +
                 ", message='" + message + '\'' +
-                ", filePath='" + filePath + '\'' +
                 ", creationDateTime=" + creationDateTime +
                 ", updatedDateTime=" + updatedDateTime +
-                ", author=" + author +
+                ", authorId=" + authorId +
+                ", files=" + files +
                 '}';
     }
 }

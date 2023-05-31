@@ -1,6 +1,6 @@
 package org.chemax.request;
 
-public class FriendshipInviteRequest {
+public class DeleteFriendRequest {
 
     private Long requesterId;
     private Long requestedId;
@@ -19,13 +19,5 @@ public class FriendshipInviteRequest {
 
     public void setRequestedId(Long requestedId) {
         this.requestedId = requestedId;
-    }
-
-    @Override
-    public String toString() {
-        return "FriendshipInviteRequest{" +
-                "requesterId=" + requesterId +
-                ", requestedId=" + requestedId +
-                '}';
     }
 }

@@ -1,7 +1,11 @@
 package org.chemax.entity;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.Map;
 
 @Entity
 @Table(name = "posts")
@@ -24,12 +28,14 @@ public class Post {
     @Column(name = "updated_date_time")
     private ZonedDateTime updatedDateTime;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User author;
+    @Column(name = "author_id")
+    private Long authorId;
 
-    @Column(name = "image")
-    private String filePath;
+    @Column(name = "image_path")
+    private String uploadPath;
+
+    @Transient
+    private Map<String, MultipartFile> files;
 
     public Long getPostId() {
         return postId;
@@ -71,19 +77,27 @@ public class Post {
         this.updatedDateTime = updatedDateTime;
     }
 
-    public User getAuthor() {
-        return author;
+    public Long getAuthorId() {
+        return authorId;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getUploadPath() {
+        return uploadPath;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setUploadPath(String uploadPath) {
+        this.uploadPath = uploadPath;
+    }
+
+    public Map<String, MultipartFile> getFiles() {
+        return files;
+    }
+
+    public void setFiles(Map<String, MultipartFile> files) {
+        this.files = files;
     }
 }

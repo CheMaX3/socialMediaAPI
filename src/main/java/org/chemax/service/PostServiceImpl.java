@@ -26,7 +26,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void createPost(PostCreateRequest postCreateRequest) {
         try {
-            Post post = postRepository.save(buildPostFromRequest(postCreateRequest));
+            postRepository.save(buildPostFromRequest(postCreateRequest));
         }
         catch (Exception ex) {
             log.error("Can't save object " + postCreateRequest.toString());
@@ -60,7 +60,7 @@ public class PostServiceImpl implements PostService {
             Post postFromDB = postRepository.findById(postId).orElseThrow(EntityNotFoundException::new);
             postFromDB.setHeader(Optional.ofNullable(postUpdateRequest.getHeader()).orElse(postFromDB.getHeader()));
             postFromDB.setMessage(Optional.ofNullable(postUpdateRequest.getMessage()).orElse(postFromDB.getMessage()));
-            postFromDB.setFilePath(Optional.ofNullable(postUpdateRequest.getFilePath()).orElse(postFromDB.getFilePath()));
+            postFromDB.setFiles(Optional.ofNullable(postUpdateRequest.getFiles()).orElse(postFromDB.getFiles()));
             postFromDB.setUpdatedDateTime(ZonedDateTime.now());
             postRepository.save(postFromDB);
         } catch (Exception ex) {
@@ -73,8 +73,8 @@ public class PostServiceImpl implements PostService {
         builtPost.setHeader(postCreateRequest.getHeader());
         builtPost.setMessage(postCreateRequest.getMessage());
         builtPost.setCreationDateTime(ZonedDateTime.now());
-        builtPost.setAuthor(postCreateRequest.getAuthor());
-        builtPost.setFilePath(postCreateRequest.getFilePath());
+        builtPost.setAuthorId(postCreateRequest.getAuthorId());
+        builtPost.setFiles(postCreateRequest.getFiles());//TODO: подумать как класть файлы
         return builtPost;
     }
 
@@ -85,8 +85,8 @@ public class PostServiceImpl implements PostService {
         postDTO.setMessage(post.getMessage());
         postDTO.setCreationDateTime(post.getCreationDateTime());
         postDTO.setUpdatedDateTime(post.getUpdatedDateTime());//TODO:подумать что возвращать
-        postDTO.setAuthor(post.getAuthor());
-        postDTO.setFilePath(post.getFilePath());
+        postDTO.setAuthorId(post.getAuthorId());
+        postDTO.setFiles(post.getFiles());
         return postDTO;
     }
 }

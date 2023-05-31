@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequestMapping(value = "/post")
 public interface PostController {
+
     @PostMapping(value = "/create")
     ResponseEntity<Void> createPost(@RequestBody PostCreateRequest postCreateRequest);
 

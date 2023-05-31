@@ -3,10 +3,11 @@ package org.chemax.controller;
 import org.chemax.entity.Friend;
 import org.chemax.entity.FriendshipInvite;
 import org.chemax.request.FriendshipInviteRequest;
-import org.chemax.request.UnsubscribeRequest;
+import org.chemax.request.DeleteFriendRequest;
 import org.chemax.service.RelationshipService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -37,8 +38,8 @@ public class RelationshipControllerImpl implements RelationshipController {
     }
 
     @Override
-    public ResponseEntity<Void> unsubscribeFromUserWithId(UnsubscribeRequest unsubscribeRequest) {
-        relationshipService.unsubscribeFromRequestedUser(unsubscribeRequest);
+    public ResponseEntity<Void> deleteAndUnsubscribeFromUserWithId(@RequestBody DeleteFriendRequest deleteFriendRequest) {
+        relationshipService.deleteAndUnsubscribeFromRequestedUser(deleteFriendRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

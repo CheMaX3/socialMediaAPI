@@ -11,9 +11,8 @@ public class FriendshipInvite {
     @Column(name = "invite_id")
     private Long inviteId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User requester;
+    @Column(name = "requester_id")
+    private Long requesterId;
 
     @Column(name = "requested_id")
     private Long requestedId;
@@ -26,12 +25,12 @@ public class FriendshipInvite {
         this.inviteId = inviteId;
     }
 
-    public User getRequester() {
-        return requester;
+    public Long getRequesterId() {
+        return requesterId;
     }
 
-    public void setRequester(User requester) {
-        this.requester = requester;
+    public void setRequesterId(Long requesterId) {
+        this.requesterId = requesterId;
     }
 
     public Long getRequestedId() {

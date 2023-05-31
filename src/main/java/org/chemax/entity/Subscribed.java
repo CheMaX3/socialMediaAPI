@@ -6,35 +6,38 @@ import javax.persistence.*;
 @Table(name = "subscribed")
 public class Subscribed {
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User userForSubscribe;
-
     @Id
-    @Column(name = "subscribed_id")
-    private Long subscribedUserId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id")
+    private Long id;
 
-    public User getUserForSubscribe() {
-        return userForSubscribe;
+    @Column(name = "requester_id")
+    private Long requesterId;
+
+    @Column(name = "requested_id")
+    private Long requestedId;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setUserForSubscribe(User userForSubscribe) {
-        this.userForSubscribe = userForSubscribe;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Long getSubscribedUserId() {
-        return subscribedUserId;
+    public Long getRequesterId() {
+        return requesterId;
     }
 
-    public void setSubscribedUserId(Long subscribedUserId) {
-        this.subscribedUserId = subscribedUserId;
+    public void setRequesterId(Long requesterId) {
+        this.requesterId = requesterId;
     }
 
-    @Override
-    public String toString() {
-        return "Subscribed{" +
-                "userToSubscribe=" + userForSubscribe +
-                ", subscriberUserId=" + subscribedUserId +
-                '}';
+    public Long getRequestedId() {
+        return requestedId;
+    }
+
+    public void setRequestedId(Long requestedId) {
+        this.requestedId = requestedId;
     }
 }

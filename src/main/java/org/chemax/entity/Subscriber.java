@@ -6,35 +6,47 @@ import javax.persistence.*;
 @Table(name = "subscribers")
 public class Subscriber {
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User userWhoSubscribes;
-
     @Id
-    @Column(name = "subscriber_id")
-    private Long targetForSubscribeUserId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id")
+    private Long id;
 
-    public User getUserWhoSubscribes() {
-        return userWhoSubscribes;
+    @Column(name = "requester_id")
+    private Long requesterId;
+
+    @Column(name = "requested_id")
+    private Long requestedId;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setUserWhoSubscribes(User userWhoSubscribes) {
-        this.userWhoSubscribes = userWhoSubscribes;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Long getTargetForSubscribeUserId() {
-        return targetForSubscribeUserId;
+    public Long getRequesterId() {
+        return requesterId;
     }
 
-    public void setTargetForSubscribeUserId(Long targetForSubscribeUserId) {
-        this.targetForSubscribeUserId = targetForSubscribeUserId;
+    public void setRequesterId(Long requesterId) {
+        this.requesterId = requesterId;
+    }
+
+    public Long getRequestedId() {
+        return requestedId;
+    }
+
+    public void setRequestedId(Long requestedId) {
+        this.requestedId = requestedId;
     }
 
     @Override
     public String toString() {
         return "Subscriber{" +
-                "userWhoSubscribes=" + userWhoSubscribes +
-                ", targetForSubscribeUserId=" + targetForSubscribeUserId +
+                "id=" + id +
+                ", requesterId=" + requesterId +
+                ", requestedId=" + requestedId +
                 '}';
     }
 }

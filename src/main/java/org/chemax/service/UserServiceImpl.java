@@ -4,8 +4,7 @@ import org.apache.log4j.Logger;
 import org.chemax.dto.UserDTO;
 import org.chemax.entity.FriendshipInvite;
 import org.chemax.entity.User;
-import org.chemax.repository.FriendshipInviteRepository;
-import org.chemax.repository.UserRepository;
+import org.chemax.repository.*;
 import org.chemax.request.UserCreateRequest;
 import org.chemax.request.UserUpdateRequest;
 import org.springframework.stereotype.Service;
@@ -21,10 +20,20 @@ public class UserServiceImpl implements UserService {
     private static final Logger log = Logger.getLogger(UserServiceImpl.class.getName());
     private final UserRepository userRepository;
     private final FriendshipInviteRepository friendshipInviteRepository;
+    private final FriendRepository friendRepository;
+    private final SubscriberRepository subscriberRepository;
+    private final SubscribedRepository subscribedRepository;
+    private final PostRepository postRepository;
 
-    public UserServiceImpl(UserRepository userRepository, FriendshipInviteRepository friendshipInviteRepository) {
+    public UserServiceImpl(UserRepository userRepository, FriendshipInviteRepository friendshipInviteRepository,
+                           FriendRepository friendRepository, SubscriberRepository subscriberRepository,
+                           SubscribedRepository subscribedRepository, PostRepository postRepository) {
         this.userRepository = userRepository;
         this.friendshipInviteRepository = friendshipInviteRepository;
+        this.friendRepository = friendRepository;
+        this.subscriberRepository = subscriberRepository;
+        this.subscribedRepository = subscribedRepository;
+        this.postRepository = postRepository;
     }
 
     @Override
@@ -44,7 +53,7 @@ public class UserServiceImpl implements UserService {
             userDTO = convertUserToUserDTO(userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
         }
         catch (Exception ex) {
-            log.error("Can't retrieve object from DB with id=" + userId);
+            log.error("Can't retrieve object from DB with userId=" + userId);
         }
         return userDTO;
     }
@@ -54,7 +63,7 @@ public class UserServiceImpl implements UserService {
         try {
             userRepository.deleteById(userId);
         } catch (Exception ex) {
-            log.error("Can't delete object with id=" + userId);
+            log.error("Can't delete object with userId=" + userId);
         }
     }
 
@@ -69,7 +78,7 @@ public class UserServiceImpl implements UserService {
                     .orElse(userFromDB.getPassword()));
             userRepository.save(userFromDB);
         } catch (Exception ex) {
-            log.error("Can't save object with id=" + userId);
+            log.error("Can't save object with userId=" + userId);
         }
     }
 
@@ -97,6 +106,11 @@ public class UserServiceImpl implements UserService {
         UserDTO userDTO = new UserDTO();
         userDTO.setUserId(user.getUserId());
         userDTO.setUsername(user.getUsername());
+        userDTO.setFriendList(friendRepository.findByRequesterId(user.getUserId()));
+        userDTO.setSubscribedList(subscribedRepository.findByRequesterId(user.getUserId()));
+        userDTO.setSubscribersList(subscriberRepository.findByRequestedId(user.getUserId()));
+        userDTO.setFriendshipInvitesList(friendshipInviteRepository.findFriendshipInvitesByRequestedId(user.getUserId()));
+        userDTO.setPosts(postRepository.findByAuthorId(user.getUserId()));
         return userDTO;
     }
 }

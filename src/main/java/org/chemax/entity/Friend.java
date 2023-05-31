@@ -6,35 +6,47 @@ import javax.persistence.*;
 @Table(name = "friends")
 public class Friend {
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User userWhoSentInvite;
-
     @Id
-    @Column(name = "friend_id")
-    private Long whoGetInviteUserId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-    public User getUserWhoSentInvite() {
-        return userWhoSentInvite;
+    @Column(name = "requester_id")
+    private Long requesterId;
+
+    @Column(name = "requested_id")
+    private Long requestedId;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setUserWhoSentInvite(User userWhoSentInvite) {
-        this.userWhoSentInvite = userWhoSentInvite;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Long getWhoGetInviteUserId() {
-        return whoGetInviteUserId;
+    public Long getRequesterId() {
+        return requesterId;
     }
 
-    public void setWhoGetInviteUserId(Long whoGetInviteUserId) {
-        this.whoGetInviteUserId = whoGetInviteUserId;
+    public void setRequesterId(Long requesterId) {
+        this.requesterId = requesterId;
+    }
+
+    public Long getRequestedId() {
+        return requestedId;
+    }
+
+    public void setRequestedId(Long requestedId) {
+        this.requestedId = requestedId;
     }
 
     @Override
     public String toString() {
         return "Friend{" +
-                "userWhoSentInvite=" + userWhoSentInvite +
-                ", friendId=" + whoGetInviteUserId +
+                "id=" + id +
+                ", requesterId=" + requesterId +
+                ", requestedId=" + requestedId +
                 '}';
     }
 }

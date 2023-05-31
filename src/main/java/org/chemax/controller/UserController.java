@@ -11,6 +11,7 @@ import java.util.List;
 
 @RequestMapping(value = "/user")
 public interface UserController {
+
     @PostMapping(value = "/create")
     ResponseEntity<Void> createUser(@RequestBody UserCreateRequest userCreateRequest);
 

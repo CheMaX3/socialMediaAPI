@@ -1,8 +1,9 @@
 package org.chemax.dto;
 
-import org.chemax.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.ZonedDateTime;
+import java.util.Map;
 
 public class PostDTO {
 
@@ -11,8 +12,8 @@ public class PostDTO {
     private String message;
     private ZonedDateTime creationDateTime;
     private ZonedDateTime updatedDateTime;
-    private User author;
-    private String filePath;
+    private Long authorId;
+    private Map<String, MultipartFile> files;
 
     public Long getPostId() {
         return postId;
@@ -54,19 +55,19 @@ public class PostDTO {
         this.updatedDateTime = updatedDateTime;
     }
 
-    public User getAuthor() {
-        return author;
+    public Long getAuthorId() {
+        return authorId;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public Map<String, MultipartFile> getFiles() {
+        return files;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setFiles(Map<String, MultipartFile> files) {
+        this.files = files;
     }
 }

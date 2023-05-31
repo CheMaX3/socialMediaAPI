@@ -1,11 +1,14 @@
 package org.chemax.request;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.ZonedDateTime;
+import java.util.Map;
 
 public class PostUpdateRequest {
     private String header;
     private String message;
-    private String filePath;
+    private Map<String, MultipartFile> files;
     private ZonedDateTime updatedDateTime;
 
     public String getHeader() {
@@ -24,12 +27,12 @@ public class PostUpdateRequest {
         this.message = message;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public Map<String, MultipartFile> getFiles() {
+        return files;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setFiles(Map<String, MultipartFile> files) {
+        this.files = files;
     }
 
     public ZonedDateTime getUpdatedDateTime() {

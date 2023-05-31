@@ -1,11 +1,13 @@
 package org.chemax.repository;
 
 import org.chemax.entity.Subscribed;
-import org.chemax.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
+@Repository
 public interface SubscribedRepository extends JpaRepository<Subscribed, Long> {
-    void deleteBySubscribedUserIdAndUserForSubscribe(Long subscribedUserId, User userForSubscribe);
-    Subscribed findBySubscribedUserIdAndUserForSubscribe(Long subscribedUserId, User userForSubscribe);
+    Subscribed findByRequesterIdAndRequestedId(Long requesterId, Long requestedId);
+    List<Subscribed> findByRequesterId(Long requesterId);
 }
