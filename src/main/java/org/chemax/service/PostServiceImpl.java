@@ -1,5 +1,6 @@
 package org.chemax.service;
 
+import org.apache.log4j.Logger;
 import org.chemax.dto.PostDTO;
 import org.chemax.entity.Post;
 import org.chemax.repository.PostRepository;
@@ -8,13 +9,14 @@ import org.chemax.request.PostUpdateRequest;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
 public class PostServiceImpl implements PostService {
 
+    private static final Logger log = Logger.getLogger(PostServiceImpl.class.getName());
     private final PostRepository postRepository;
 
     public PostServiceImpl(PostRepository postRepository) {
@@ -27,7 +29,7 @@ public class PostServiceImpl implements PostService {
             Post post = postRepository.save(buildPostFromRequest(postCreateRequest));
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("Can't save object " + postCreateRequest.toString());
         }
     }
 
@@ -38,7 +40,7 @@ public class PostServiceImpl implements PostService {
             postDTO = convertPostToPostDTO(postRepository.findById(postId).orElseThrow(EntityNotFoundException::new));
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("Can't retrieve object from DB with id=" + postId);
         }
         return postDTO;
     }
@@ -46,9 +48,9 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePostById(Long postId) {
         try {
-            postRepository.delete(postRepository.findById(postId).orElseThrow(EntityNotFoundException::new));
+            postRepository.deleteById(postId);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("Can't delete object with id=" + postId);
         }
     }
 
@@ -58,21 +60,21 @@ public class PostServiceImpl implements PostService {
             Post postFromDB = postRepository.findById(postId).orElseThrow(EntityNotFoundException::new);
             postFromDB.setHeader(Optional.ofNullable(postUpdateRequest.getHeader()).orElse(postFromDB.getHeader()));
             postFromDB.setMessage(Optional.ofNullable(postUpdateRequest.getMessage()).orElse(postFromDB.getMessage()));
-            postFromDB.setImages(Optional.ofNullable(postUpdateRequest.getContent()).orElse(postFromDB.getImages()));
+            postFromDB.setFilePath(Optional.ofNullable(postUpdateRequest.getFilePath()).orElse(postFromDB.getFilePath()));
             postFromDB.setUpdatedDateTime(ZonedDateTime.now());
             postRepository.save(postFromDB);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("Can't save object with id=" + postId);
         }
     }
 
-    private Post buildPostFromRequest(PostCreateRequest postCreateRequest) {
+    private Post buildPostFromRequest(PostCreateRequest postCreateRequest) throws IOException {
         Post builtPost = new Post();
         builtPost.setHeader(postCreateRequest.getHeader());
         builtPost.setMessage(postCreateRequest.getMessage());
-        builtPost.setImages(postCreateRequest.getContent());
         builtPost.setCreationDateTime(ZonedDateTime.now());
         builtPost.setAuthor(postCreateRequest.getAuthor());
+        builtPost.setFilePath(postCreateRequest.getFilePath());
         return builtPost;
     }
 
@@ -81,10 +83,10 @@ public class PostServiceImpl implements PostService {
         postDTO.setPostId(post.getPostId());
         postDTO.setHeader(post.getHeader());
         postDTO.setMessage(post.getMessage());
-        postDTO.setImages(Optional.ofNullable(post.getImages()).orElse(new ArrayList<>()));
         postDTO.setCreationDateTime(post.getCreationDateTime());
         postDTO.setUpdatedDateTime(post.getUpdatedDateTime());//TODO:подумать что возвращать
         postDTO.setAuthor(post.getAuthor());
+        postDTO.setFilePath(post.getFilePath());
         return postDTO;
     }
 }

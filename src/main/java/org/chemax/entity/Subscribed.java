@@ -5,27 +5,36 @@ import javax.persistence.*;
 @Entity
 @Table(name = "subscribed")
 public class Subscribed {
+
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User userForSubscribe;
 
     @Id
     @Column(name = "subscribed_id")
-    private Long subscribedId;
+    private Long subscribedUserId;
 
-    public User getUser() {
-        return user;
+    public User getUserForSubscribe() {
+        return userForSubscribe;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserForSubscribe(User userForSubscribe) {
+        this.userForSubscribe = userForSubscribe;
     }
 
-    public Long getSubscribedId() {
-        return subscribedId;
+    public Long getSubscribedUserId() {
+        return subscribedUserId;
     }
 
-    public void setSubscribedId(Long subscribedId) {
-        this.subscribedId = subscribedId;
+    public void setSubscribedUserId(Long subscribedUserId) {
+        this.subscribedUserId = subscribedUserId;
+    }
+
+    @Override
+    public String toString() {
+        return "Subscribed{" +
+                "userToSubscribe=" + userForSubscribe +
+                ", subscriberUserId=" + subscribedUserId +
+                '}';
     }
 }

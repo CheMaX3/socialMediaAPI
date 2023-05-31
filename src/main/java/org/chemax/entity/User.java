@@ -24,14 +24,17 @@ public class User {
     @Transient
     private String passwordConfirm;
 
-    @OneToMany(mappedBy = "user")
-    private List<Friend> friendList;
+//    @OneToMany(mappedBy = "user")
+//    private List<Friend> friendList;
 
-    @OneToMany(mappedBy = "user")
-    private List<Subscriber> subscribers;
+//    @OneToMany(mappedBy = "user")
+//    private List<Subscriber> subscribers;
+//
+//    @OneToMany(mappedBy = "user")
+//    private List<Subscribed> subscribed;
 
-    @OneToMany(mappedBy = "user")
-    private List<Subscribed> subscribed;
+//    @OneToMany(mappedBy = "requester")
+//    private List<FriendshipInvite> friendshipInvites;
 
     public Long getUserId() {
         return userId;
@@ -73,27 +76,35 @@ public class User {
         this.passwordConfirm = passwordConfirm;
     }
 
-    public List<Friend> getFriendList() {
-        return friendList;
-    }
+//    public List<Friend> getFriendList() {
+//        return friendList;
+//    }
+//
+//    public void setFriendList(List<Friend> friendList) {
+//        this.friendList = friendList;
+//    }
 
-    public void setFriendList(List<Friend> friendList) {
-        this.friendList = friendList;
-    }
+//    public List<Subscriber> getSubscribers() {
+//        return subscribers;
+//    }
+//
+//    public void setSubscribers(List<Subscriber> subscribers) {
+//        this.subscribers = subscribers;
+//    }
+//
+//    public List<Subscribed> getSubscribed() {
+//        return subscribed;
+//    }
+//
+//    public void setSubscribed(List<Subscribed> subscribed) {
+//        this.subscribed = subscribed;
+//    }
 
-    public List<Subscriber> getSubscribers() {
-        return subscribers;
-    }
-
-    public void setSubscribers(List<Subscriber> subscribers) {
-        this.subscribers = subscribers;
-    }
-
-    public List<Subscribed> getSubscribed() {
-        return subscribed;
-    }
-
-    public void setSubscribed(List<Subscribed> subscribed) {
-        this.subscribed = subscribed;
-    }
+//    public List<FriendshipInvite> getFriendshipInvites() {
+//        return friendshipInvites;
+//    }
+//
+//    public void setFriendshipInvites(List<FriendshipInvite> friendshipInvites) {
+//        this.friendshipInvites = friendshipInvites;
+//    }
 }

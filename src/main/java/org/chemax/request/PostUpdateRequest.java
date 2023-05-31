@@ -1,14 +1,11 @@
 package org.chemax.request;
 
-import org.chemax.entity.Image;
-
 import java.time.ZonedDateTime;
-import java.util.List;
 
 public class PostUpdateRequest {
     private String header;
     private String message;
-    private List<Image> content;
+    private String filePath;
     private ZonedDateTime updatedDateTime;
 
     public String getHeader() {
@@ -27,12 +24,12 @@ public class PostUpdateRequest {
         this.message = message;
     }
 
-    public List<Image> getContent() {
-        return content;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setContent(List<Image> content) {
-        this.content = content;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public ZonedDateTime getUpdatedDateTime() {

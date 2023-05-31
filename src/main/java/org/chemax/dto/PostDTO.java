@@ -1,10 +1,8 @@
 package org.chemax.dto;
 
-import org.chemax.entity.Image;
 import org.chemax.entity.User;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 public class PostDTO {
 
@@ -14,7 +12,7 @@ public class PostDTO {
     private ZonedDateTime creationDateTime;
     private ZonedDateTime updatedDateTime;
     private User author;
-    private List<Image> images;
+    private String filePath;
 
     public Long getPostId() {
         return postId;
@@ -64,11 +62,11 @@ public class PostDTO {
         this.author = author;
     }
 
-    public List<Image> getImages() {
-        return images;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setImages(List<Image> images) {
-        this.images = images;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }

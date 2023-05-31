@@ -1,19 +1,22 @@
 package org.chemax.controller;
 
 import org.chemax.dto.UserDTO;
+import org.chemax.entity.FriendshipInvite;
 import org.chemax.request.UserCreateRequest;
 import org.chemax.request.UserUpdateRequest;
-import org.chemax.service.UserServiceImpl;
+import org.chemax.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class UserControllerImpl implements UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public UserControllerImpl(UserServiceImpl userService) {
+    public UserControllerImpl(UserService userService) {
         this.userService = userService;
     }
 
@@ -39,5 +42,11 @@ public class UserControllerImpl implements UserController {
     public ResponseEntity<Void> updateUserById(Long userId, UserUpdateRequest userUpdateRequest) {
         userService.updateUserById(userId, userUpdateRequest);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<FriendshipInvite>> getFriendshipInviteListByUserId(Long userId) {
+        final List<FriendshipInvite> friendshipInvites = userService.getFriendshipInviteListByUserId(userId);
+        return new ResponseEntity<>(friendshipInvites, HttpStatus.OK);
     }
 }

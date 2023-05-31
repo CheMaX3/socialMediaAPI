@@ -2,7 +2,6 @@ package org.chemax.entity;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -29,8 +28,8 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User author;
 
-    @OneToMany(mappedBy = "post")
-    private List<Image> images;
+    @Column(name = "image")
+    private String filePath;
 
     public Long getPostId() {
         return postId;
@@ -80,11 +79,11 @@ public class Post {
         this.author = author;
     }
 
-    public List<Image> getImages() {
-        return images;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setImages(List<Image> images) {
-        this.images = images;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }

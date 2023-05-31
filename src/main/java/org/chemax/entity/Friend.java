@@ -8,25 +8,33 @@ public class Friend {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User userWhoSentInvite;
 
     @Id
     @Column(name = "friend_id")
-    private Long friendId;
+    private Long whoGetInviteUserId;
 
-    public User getUser() {
-        return user;
+    public User getUserWhoSentInvite() {
+        return userWhoSentInvite;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserWhoSentInvite(User userWhoSentInvite) {
+        this.userWhoSentInvite = userWhoSentInvite;
     }
 
-    public Long getFriendId() {
-        return friendId;
+    public Long getWhoGetInviteUserId() {
+        return whoGetInviteUserId;
     }
 
-    public void setFriendId(Long friendId) {
-        this.friendId = friendId;
+    public void setWhoGetInviteUserId(Long whoGetInviteUserId) {
+        this.whoGetInviteUserId = whoGetInviteUserId;
+    }
+
+    @Override
+    public String toString() {
+        return "Friend{" +
+                "userWhoSentInvite=" + userWhoSentInvite +
+                ", friendId=" + whoGetInviteUserId +
+                '}';
     }
 }

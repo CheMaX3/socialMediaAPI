@@ -8,25 +8,33 @@ public class Subscriber {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User userWhoSubscribes;
 
     @Id
     @Column(name = "subscriber_id")
-    private Long subscriberId;
+    private Long targetForSubscribeUserId;
 
-    public User getUser() {
-        return user;
+    public User getUserWhoSubscribes() {
+        return userWhoSubscribes;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserWhoSubscribes(User userWhoSubscribes) {
+        this.userWhoSubscribes = userWhoSubscribes;
     }
 
-    public Long getSubscriberId() {
-        return subscriberId;
+    public Long getTargetForSubscribeUserId() {
+        return targetForSubscribeUserId;
     }
 
-    public void setSubscriberId(Long subscriberId) {
-        this.subscriberId = subscriberId;
+    public void setTargetForSubscribeUserId(Long targetForSubscribeUserId) {
+        this.targetForSubscribeUserId = targetForSubscribeUserId;
+    }
+
+    @Override
+    public String toString() {
+        return "Subscriber{" +
+                "userWhoSubscribes=" + userWhoSubscribes +
+                ", targetForSubscribeUserId=" + targetForSubscribeUserId +
+                '}';
     }
 }

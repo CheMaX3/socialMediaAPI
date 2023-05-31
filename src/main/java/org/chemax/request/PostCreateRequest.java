@@ -1,16 +1,14 @@
 package org.chemax.request;
 
-import org.chemax.entity.Image;
 import org.chemax.entity.User;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 public class PostCreateRequest {
 
     private String header;
     private String message;
-    private List<Image> content;
+    private String filePath;
     private ZonedDateTime creationDateTime;
     private ZonedDateTime updatedDateTime;
     private User author;
@@ -31,12 +29,12 @@ public class PostCreateRequest {
         this.message = message;
     }
 
-    public List<Image> getContent() {
-        return content;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setContent(List<Image> content) {
-        this.content = content;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public ZonedDateTime getCreationDateTime() {
@@ -61,5 +59,17 @@ public class PostCreateRequest {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    @Override
+    public String toString() {
+        return "PostCreateRequest{" +
+                "header='" + header + '\'' +
+                ", message='" + message + '\'' +
+                ", filePath='" + filePath + '\'' +
+                ", creationDateTime=" + creationDateTime +
+                ", updatedDateTime=" + updatedDateTime +
+                ", author=" + author +
+                '}';
     }
 }
