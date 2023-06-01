@@ -14,9 +14,8 @@ public class Image {
     @Column(name = "content")
     private Byte[] content;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @Column(name = "post_id")
+    private Long postId;
 
     public Long getImageId() {
         return imageId;
@@ -34,11 +33,11 @@ public class Image {
         this.content = content;
     }
 
-    public Post getPost() {
-        return post;
+    public Long getPostId() {
+        return postId;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 }

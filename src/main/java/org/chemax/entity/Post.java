@@ -1,11 +1,8 @@
 package org.chemax.entity;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.Map;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -31,11 +28,8 @@ public class Post {
     @Column(name = "author_id")
     private Long authorId;
 
-    @Column(name = "image_path")
-    private String uploadPath;
-
     @Transient
-    private Map<String, MultipartFile> files;
+    private List<Image> images;
 
     public Long getPostId() {
         return postId;
@@ -85,19 +79,11 @@ public class Post {
         this.authorId = authorId;
     }
 
-    public String getUploadPath() {
-        return uploadPath;
+    public List<Image> getImages() {
+        return images;
     }
 
-    public void setUploadPath(String uploadPath) {
-        this.uploadPath = uploadPath;
-    }
-
-    public Map<String, MultipartFile> getFiles() {
-        return files;
-    }
-
-    public void setFiles(Map<String, MultipartFile> files) {
-        this.files = files;
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 }

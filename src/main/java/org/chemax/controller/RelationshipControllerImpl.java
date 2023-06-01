@@ -42,6 +42,4 @@ public class RelationshipControllerImpl implements RelationshipController {
         relationshipService.deleteAndUnsubscribeFromRequestedUser(deleteFriendRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 }

@@ -1,14 +1,15 @@
 package org.chemax.service;
 
 import org.chemax.dto.UserDTO;
-import org.chemax.entity.FriendshipInvite;
+import org.chemax.entity.Role;
 import org.chemax.entity.User;
 import org.chemax.request.UserCreateRequest;
 import org.chemax.request.UserUpdateRequest;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     void createUser(UserCreateRequest userCreateRequest);
 
@@ -18,5 +19,7 @@ public interface UserService {
 
     void updateUserById(Long userId, UserUpdateRequest userUpdateRequest);
 
-    List<FriendshipInvite> getFriendshipInviteListByUserId(Long userId);
+    List<User> getAllUsers();
+
+    List<Role> getAllRoles();
 }

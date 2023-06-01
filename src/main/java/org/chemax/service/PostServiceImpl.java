@@ -60,7 +60,6 @@ public class PostServiceImpl implements PostService {
             Post postFromDB = postRepository.findById(postId).orElseThrow(EntityNotFoundException::new);
             postFromDB.setHeader(Optional.ofNullable(postUpdateRequest.getHeader()).orElse(postFromDB.getHeader()));
             postFromDB.setMessage(Optional.ofNullable(postUpdateRequest.getMessage()).orElse(postFromDB.getMessage()));
-            postFromDB.setFiles(Optional.ofNullable(postUpdateRequest.getFiles()).orElse(postFromDB.getFiles()));
             postFromDB.setUpdatedDateTime(ZonedDateTime.now());
             postRepository.save(postFromDB);
         } catch (Exception ex) {
@@ -74,7 +73,6 @@ public class PostServiceImpl implements PostService {
         builtPost.setMessage(postCreateRequest.getMessage());
         builtPost.setCreationDateTime(ZonedDateTime.now());
         builtPost.setAuthorId(postCreateRequest.getAuthorId());
-        builtPost.setFiles(postCreateRequest.getFiles());//TODO: подумать как класть файлы
         return builtPost;
     }
 
@@ -83,10 +81,7 @@ public class PostServiceImpl implements PostService {
         postDTO.setPostId(post.getPostId());
         postDTO.setHeader(post.getHeader());
         postDTO.setMessage(post.getMessage());
-        postDTO.setCreationDateTime(post.getCreationDateTime());
-        postDTO.setUpdatedDateTime(post.getUpdatedDateTime());//TODO:подумать что возвращать
         postDTO.setAuthorId(post.getAuthorId());
-        postDTO.setFiles(post.getFiles());
         return postDTO;
     }
 }

@@ -1,8 +1,12 @@
 package org.chemax.request;
 
+import javax.validation.constraints.NotNull;
+
 public class DeleteFriendRequest {
 
+    @NotNull
     private Long requesterId;
+    @NotNull
     private Long requestedId;
 
     public Long getRequesterId() {
