@@ -3,9 +3,15 @@ package org.chemax.service;
 import org.apache.log4j.Logger;
 import org.chemax.dto.PostDTO;
 import org.chemax.entity.Post;
+import org.chemax.entity.Subscriber;
 import org.chemax.repository.PostRepository;
+import org.chemax.repository.SubscriberRepository;
 import org.chemax.request.PostCreateRequest;
 import org.chemax.request.PostUpdateRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -15,15 +21,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class PostServiceImpl implements PostService {
 
     private static final Logger log = Logger.getLogger(PostServiceImpl.class.getName());
     private final PostRepository postRepository;
+    private final SubscriberRepository subscriberRepository;
 
-    public PostServiceImpl(PostRepository postRepository) {
+    public PostServiceImpl(PostRepository postRepository, SubscriberRepository subscriberRepository) {
         this.postRepository = postRepository;
+        this.subscriberRepository = subscriberRepository;
     }
 
     @Override
@@ -85,6 +94,26 @@ public class PostServiceImpl implements PostService {
             log.error("Can't retrieve objects from DB with authorId=" + authorId);
         }
         return postList;
+    }
+
+    @Override
+    public List<PostDTO> getFeedByUserId(Long userId) {
+        Pageable firstPageWithFiveElements = PageRequest
+                .of(0, 5, Sort.by("creationDateTime").descending());
+        List<Subscriber> subcriberList = subscriberRepository.findByRequestedId(userId);
+
+        List<List<Post>> collect = subcriberList.stream()
+                .map(subscriber -> subscriber.getRequestedId())
+                .map(subId -> postRepository.findByAuthorId(subId))
+                .collect(Collectors.toList());
+
+
+        List<List<Subscriber>> lists = postRepository.findAll().stream()
+                .map(post -> subcriberList.stream()
+                        .filter(e -> e.getRequestedId().equals(post.getAuthorId())).toList())
+                .toList();
+        Page<Post> feed = postRepository.findAll(firstPageWithFiveElements);
+        return feed.stream().map(this::convertPostToPostDTO).collect(Collectors.toList());
     }
 
     private Post buildPostFromRequest(PostCreateRequest postCreateRequest) throws IOException {

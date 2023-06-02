@@ -25,6 +25,9 @@ public interface PostController {
     ResponseEntity<PostDTO> updatePostById(@RequestParam Long postId,
                                            @RequestBody PostUpdateRequest postUpdateRequest);
 
-    @GetMapping(value = "getPostsByAuthor")
+    @GetMapping(value = "get_posts_by_author")
     ResponseEntity<List<PostDTO>> getPostsByAuthorId(@RequestParam Long authorId);
+
+    @GetMapping(value = "get_feed")
+    ResponseEntity<List<PostDTO>> getFeedByUserId(@RequestParam Long userId);
 }

@@ -7,12 +7,6 @@ import org.chemax.entity.User;
 import org.chemax.repository.*;
 import org.chemax.request.UserCreateRequest;
 import org.chemax.request.UserUpdateRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -23,11 +17,15 @@ import java.util.Optional;
 
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
 
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
+//    @Bean
+//    public PasswordEncoder passwordEncoder()
+//    {
+//        return new BCryptPasswordEncoder();
+//    }
 
     private static final Logger log = Logger.getLogger(UserServiceImpl.class.getName());
     private final UserRepository userRepository;
@@ -129,7 +127,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         builtUser.setEmail(userCreateRequest.getEmail());
         builtUser.setPassword(userCreateRequest.getPassword());
         builtUser.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
-        builtUser.setPassword(passwordEncoder.encode(userCreateRequest.getPassword()));
+        builtUser.setPassword(/*passwordEncoder().encode(userCreateRequest.getPassword())*/userCreateRequest.getPassword());
         return builtUser;
     }
 
@@ -145,17 +143,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userDTO;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) {
-        User user = new User();
-        try {
-            user = userRepository.findByUsername(username);
-        }
-        catch (Exception ex) {
-            log.error("User with name: " + username + " not found");
-        }
-        return user;
-    }
+//    @Override
+//    public UserDetails loadUserByUsername(String username) {
+//        User user = new User();
+//        try {
+//            user = userRepository.findByUsername(username);
+//        }
+//        catch (Exception ex) {
+//            log.error("User with name: " + username + " not found");
+//        }
+//        return user;
+//    }
 
     private boolean existUserCheck(String username) {
         boolean userExists = true;

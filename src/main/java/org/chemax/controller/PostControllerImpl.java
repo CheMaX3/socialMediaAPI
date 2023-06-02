@@ -49,4 +49,12 @@ public class PostControllerImpl implements PostController {
         final List<PostDTO> postList = postService.getPostsByAuthorId(authorId);
         return new ResponseEntity<>(postList, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<List<PostDTO>> getFeedByUserId(Long userId) {
+        final List<PostDTO> feed = postService.getFeedByUserId(userId);
+        return new ResponseEntity<>(feed, HttpStatus.OK);
+    }
+
+
 }

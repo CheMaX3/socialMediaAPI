@@ -17,4 +17,6 @@ public interface PostService {
     PostDTO updatePostById(Long postId, PostUpdateRequest postUpdateRequest);
 
     List<PostDTO> getPostsByAuthorId(Long authorId);
+
+    List<PostDTO> getFeedByUserId(Long userId);
 }
