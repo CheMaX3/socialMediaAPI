@@ -3,34 +3,47 @@ package org.chemax.service;
 import org.apache.log4j.Logger;
 import org.chemax.dto.PostDTO;
 import org.chemax.entity.Post;
+import org.chemax.entity.Subscriber;
 import org.chemax.repository.PostRepository;
+import org.chemax.repository.SubscriberRepository;
 import org.chemax.request.PostCreateRequest;
 import org.chemax.request.PostUpdateRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
 
     private static final Logger log = Logger.getLogger(PostServiceImpl.class.getName());
     private final PostRepository postRepository;
+    private final SubscriberRepository subscriberRepository;
 
-    public PostServiceImpl(PostRepository postRepository) {
+    public PostServiceImpl(PostRepository postRepository, SubscriberRepository subscriberRepository) {
         this.postRepository = postRepository;
+        this.subscriberRepository = subscriberRepository;
     }
 
     @Override
-    public void createPost(PostCreateRequest postCreateRequest) {
+    public PostDTO createPost(PostCreateRequest postCreateRequest) {
+        PostDTO postDTO = new PostDTO();
         try {
-            postRepository.save(buildPostFromRequest(postCreateRequest));
+            postDTO = convertPostToPostDTO(postRepository.save(buildPostFromRequest(postCreateRequest)));
         }
         catch (Exception ex) {
             log.error("Can't save object " + postCreateRequest.toString());
         }
+        return postDTO;
     }
 
     @Override
@@ -55,16 +68,48 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void updatePostById(Long postId, PostUpdateRequest postUpdateRequest) {
+    public PostDTO updatePostById(Long postId, PostUpdateRequest postUpdateRequest) {
+        PostDTO postDTO = new PostDTO();
         try {
             Post postFromDB = postRepository.findById(postId).orElseThrow(EntityNotFoundException::new);
             postFromDB.setHeader(Optional.ofNullable(postUpdateRequest.getHeader()).orElse(postFromDB.getHeader()));
             postFromDB.setMessage(Optional.ofNullable(postUpdateRequest.getMessage()).orElse(postFromDB.getMessage()));
             postFromDB.setUpdatedDateTime(ZonedDateTime.now());
-            postRepository.save(postFromDB);
+            postDTO = convertPostToPostDTO(postRepository.save(postFromDB));
         } catch (Exception ex) {
             log.error("Can't save object with id=" + postId);
         }
+        return postDTO;
+    }
+
+    @Override
+    public List<PostDTO> getPostsByAuthorId(Long authorId) {
+        List<PostDTO> postList = new ArrayList<>();
+        try {
+            postList = postRepository.findByAuthorId(authorId).stream().map(this::convertPostToPostDTO)
+                    .collect(Collectors.toList());
+        }
+        catch (Exception ex) {
+            log.error("Can't retrieve objects from DB with authorId=" + authorId);
+        }
+        return postList;
+    }
+
+    @Override
+    public List<PostDTO> getFeedByUserId(Long userId) {
+        Pageable firstPageWithFiveElements = PageRequest
+                .of(0, 5, Sort.by("creationDateTime").descending());
+        List<Subscriber> subcriberList = subscriberRepository.findByRequesterId(userId);
+        List<Post> postList = postRepository.findAll();
+        List<Post> feed = new ArrayList<>();
+        for (Post post : postList) {
+            for (Subscriber subscriber : subcriberList) {
+                if (subscriber.getRequestedId().equals(post.getAuthorId())) {
+                    feed.add(post);
+                }
+            }
+        }
+        return feed.stream().map(this::convertPostToPostDTO).collect(Collectors.toList());
     }
 
     private Post buildPostFromRequest(PostCreateRequest postCreateRequest) throws IOException {

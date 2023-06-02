@@ -19,6 +19,6 @@ public interface RelationshipController {
     @GetMapping(value = "/decline")
     ResponseEntity<Void> declineFriendshipInviteWithInviteId(@RequestParam Long inviteId);
 
-    @PostMapping(value = "/deleteFriend")
+    @PostMapping(value = "/delete_friend")
     ResponseEntity<Void> deleteAndUnsubscribeFromUserWithId(@RequestBody DeleteFriendRequest deleteFriendRequest);
 }

@@ -7,8 +7,10 @@ import org.chemax.entity.User;
 import org.chemax.repository.*;
 import org.chemax.request.UserCreateRequest;
 import org.chemax.request.UserUpdateRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -17,8 +19,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private static final Logger log = Logger.getLogger(UserServiceImpl.class.getName());
     private final UserRepository userRepository;
@@ -26,27 +32,27 @@ public class UserServiceImpl implements UserService {
     private final FriendRepository friendRepository;
     private final SubscriberRepository subscriberRepository;
     private final SubscribedRepository subscribedRepository;
-    private final PostRepository postRepository;
     private final RoleRepository roleRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PostService postService;
 
     public UserServiceImpl(UserRepository userRepository, FriendshipInviteRepository friendshipInviteRepository,
                            FriendRepository friendRepository, SubscriberRepository subscriberRepository,
-                           SubscribedRepository subscribedRepository, PostRepository postRepository,
-                           RoleRepository roleRepository) {
+                           SubscribedRepository subscribedRepository, RoleRepository roleRepository,
+                           PostService postService) {
         this.userRepository = userRepository;
         this.friendshipInviteRepository = friendshipInviteRepository;
         this.friendRepository = friendRepository;
         this.subscriberRepository = subscriberRepository;
         this.subscribedRepository = subscribedRepository;
-        this.postRepository = postRepository;
         this.roleRepository = roleRepository;
+        this.postService = postService;
     }
 
     @Override
     public void createUser(UserCreateRequest userCreateRequest) {
         try {
-            userRepository.save(buildUserFromRequest(userCreateRequest));
+            User user = buildUserFromRequest(userCreateRequest);
+            userRepository.save(user);
         }
         catch (Exception ex) {
             log.error("Can't save object " + userCreateRequest.toString());
@@ -120,7 +126,7 @@ public class UserServiceImpl implements UserService {
         builtUser.setEmail(userCreateRequest.getEmail());
         builtUser.setPassword(userCreateRequest.getPassword());
         builtUser.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
-        builtUser.setPassword(bCryptPasswordEncoder.encode(userCreateRequest.getPassword()));
+        builtUser.setPassword(passwordEncoder.encode(userCreateRequest.getPassword()));
         return builtUser;
     }
 
@@ -132,7 +138,7 @@ public class UserServiceImpl implements UserService {
         userDTO.setSubscribedList(subscribedRepository.findByRequesterId(user.getUserId()));
         userDTO.setSubscribersList(subscriberRepository.findByRequestedId(user.getUserId()));
         userDTO.setFriendshipInvitesList(friendshipInviteRepository.findFriendshipInvitesByRequestedId(user.getUserId()));
-        userDTO.setPosts(postRepository.findByAuthorId(user.getUserId()));
+        userDTO.setPosts(postService.getPostsByAuthorId(user.getUserId()));
         return userDTO;
     }
 
@@ -143,16 +149,8 @@ public class UserServiceImpl implements UserService {
             user = userRepository.findByUsername(username);
         }
         catch (Exception ex) {
-            log.error("User with name: " + username + " not found");
+            log.error("Can't find user with username=" + username);
         }
         return user;
-    }
-
-    public BCryptPasswordEncoder getbCryptPasswordEncoder() {
-        return bCryptPasswordEncoder;
-    }
-
-    public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 }

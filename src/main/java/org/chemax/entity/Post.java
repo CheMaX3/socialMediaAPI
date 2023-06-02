@@ -29,7 +29,7 @@ public class Post {
     private Long authorId;
 
     @Transient
-    private List<Image> images;
+    private List<MediaFile> mediaFiles;
 
     public Long getPostId() {
         return postId;
@@ -79,11 +79,11 @@ public class Post {
         this.authorId = authorId;
     }
 
-    public List<Image> getImages() {
-        return images;
+    public List<MediaFile> getMediaFiles() {
+        return mediaFiles;
     }
 
-    public void setImages(List<Image> images) {
-        this.images = images;
+    public void setMediaFiles(List<MediaFile> mediaFiles) {
+        this.mediaFiles = mediaFiles;
     }
 }

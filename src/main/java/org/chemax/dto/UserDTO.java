@@ -12,7 +12,7 @@ public class UserDTO  {
     private List<Subscriber> subscribersList;
     private List<Subscribed> subscribedList;
     private List<FriendshipInvite> friendshipInvitesList;
-    private List<Post> posts;
+    private List<PostDTO> posts;
 
     public Long getUserId() {
         return userId;
@@ -62,11 +62,11 @@ public class UserDTO  {
         this.friendshipInvitesList = friendshipInvitesList;
     }
 
-    public List<Post> getPosts() {
+    public List<PostDTO> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<Post> posts) {
+    public void setPosts(List<PostDTO> posts) {
         this.posts = posts;
     }
 }
