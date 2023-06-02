@@ -3,7 +3,6 @@ package org.chemax.config;
 import org.chemax.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -29,18 +28,14 @@ public class SecurityConfig {
                 .csrf()
                     .disable()
                 .authorizeRequests()
-//                    .antMatchers("/admin/**")
-//                    .hasAnyRole("ADMIN")
-//                    .antMatchers("/user/**", "/media/**", "/post/**", "/relationship/**")
-//                    .hasAnyRole("USER", "ADMIN")
-//                    .antMatchers("/login/**", "/registration/**")
-                    .antMatchers("/")
+                    .antMatchers("/admin/**")
+                    .hasAnyRole("ADMIN")
+                    .antMatchers("/user/**", "/media/**", "/post/**", "/relationship/**")
+                    .hasAnyRole("USER", "ADMIN")
+                    .antMatchers("/login/**", "/registration/**")
                     .permitAll()
-//                    .anyRequest()
-//                    .authenticated()
-                    .and()
-                    .formLogin()
-                    .defaultSuccessUrl("/user/get?userId=8")
+                    .anyRequest()
+                    .authenticated()
                 .and()
                     .httpBasic()
                 .and()
@@ -48,13 +43,5 @@ public class SecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         return http.build();
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
     }
 }
