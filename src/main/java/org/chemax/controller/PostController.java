@@ -1,7 +1,6 @@
 package org.chemax.controller;
 
 import org.chemax.dto.PostDTO;
-import org.chemax.entity.Post;
 import org.chemax.request.PostCreateRequest;
 import org.chemax.request.PostUpdateRequest;
 import org.springframework.http.ResponseEntity;

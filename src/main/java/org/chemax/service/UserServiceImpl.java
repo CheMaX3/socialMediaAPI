@@ -7,6 +7,10 @@ import org.chemax.entity.User;
 import org.chemax.repository.*;
 import org.chemax.request.UserCreateRequest;
 import org.chemax.request.UserUpdateRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -17,15 +21,10 @@ import java.util.Optional;
 
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-//    @Bean
-//    public PasswordEncoder passwordEncoder()
-//    {
-//        return new BCryptPasswordEncoder();
-//    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private static final Logger log = Logger.getLogger(UserServiceImpl.class.getName());
     private final UserRepository userRepository;
@@ -127,7 +126,7 @@ public class UserServiceImpl implements UserService {
         builtUser.setEmail(userCreateRequest.getEmail());
         builtUser.setPassword(userCreateRequest.getPassword());
         builtUser.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
-        builtUser.setPassword(/*passwordEncoder().encode(userCreateRequest.getPassword())*/userCreateRequest.getPassword());
+        builtUser.setPassword(passwordEncoder.encode(userCreateRequest.getPassword()));
         return builtUser;
     }
 
@@ -143,29 +142,15 @@ public class UserServiceImpl implements UserService {
         return userDTO;
     }
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) {
-//        User user = new User();
-//        try {
-//            user = userRepository.findByUsername(username);
-//        }
-//        catch (Exception ex) {
-//            log.error("User with name: " + username + " not found");
-//        }
-//        return user;
-//    }
-
-    private boolean existUserCheck(String username) {
-        boolean userExists = true;
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        User user = new User();
         try {
-            User userFromDB = userRepository.findByUsername(username);
-            if (userFromDB == null) {
-                userExists = false;
-            }
+            user = userRepository.findByUsername(username);
         }
         catch (Exception ex) {
-           log.error("Can't connect to DB");
+            log.error("Can't find user with username=" + username);
         }
-        return userExists;
+        return user;
     }
 }

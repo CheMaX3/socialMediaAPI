@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -100,19 +99,16 @@ public class PostServiceImpl implements PostService {
     public List<PostDTO> getFeedByUserId(Long userId) {
         Pageable firstPageWithFiveElements = PageRequest
                 .of(0, 5, Sort.by("creationDateTime").descending());
-        List<Subscriber> subcriberList = subscriberRepository.findByRequestedId(userId);
-
-        List<List<Post>> collect = subcriberList.stream()
-                .map(subscriber -> subscriber.getRequestedId())
-                .map(subId -> postRepository.findByAuthorId(subId))
-                .collect(Collectors.toList());
-
-
-        List<List<Subscriber>> lists = postRepository.findAll().stream()
-                .map(post -> subcriberList.stream()
-                        .filter(e -> e.getRequestedId().equals(post.getAuthorId())).toList())
-                .toList();
-        Page<Post> feed = postRepository.findAll(firstPageWithFiveElements);
+        List<Subscriber> subcriberList = subscriberRepository.findByRequesterId(userId);
+        List<Post> postList = postRepository.findAll();
+        List<Post> feed = new ArrayList<>();
+        for (Post post : postList) {
+            for (Subscriber subscriber : subcriberList) {
+                if (subscriber.getRequestedId().equals(post.getAuthorId())) {
+                    feed.add(post);
+                }
+            }
+        }
         return feed.stream().map(this::convertPostToPostDTO).collect(Collectors.toList());
     }
 

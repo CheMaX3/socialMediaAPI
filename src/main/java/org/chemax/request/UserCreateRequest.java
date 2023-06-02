@@ -19,7 +19,6 @@ public class UserCreateRequest {
     private String email;
 
     @NotEmpty(message = "Поле пароля не может быть пустым")
-    @Size(min = 4, max = 16, message = "Пароль не может быть короче 4 символов и длиннее 16 символов" )
     @Column(name = "password")
     private String password;
 

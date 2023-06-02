@@ -1,10 +1,6 @@
 package org.chemax.request;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.constraints.NotNull;
-import java.time.ZonedDateTime;
-import java.util.Map;
 
 public class PostUpdateRequest {
 
