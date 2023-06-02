@@ -1,5 +1,6 @@
 package org.chemax.entity;
 
+import org.chemax.dto.PostDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -32,7 +33,6 @@ public class User implements UserDetails {
     private String email;
 
     @NotEmpty(message = "Поле пароля не может быть пустым")
-    @Size(min = 4, max = 16, message = "Пароль не может быть короче 4 символов и длиннее 16 символов" )
     @Column(name = "password")
     private String password;
 
@@ -52,7 +52,7 @@ public class User implements UserDetails {
     private List<FriendshipInvite> friendshipInvitesList;
 
     @Transient
-    private List<Post> posts;
+    private List<PostDTO> posts;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -145,11 +145,11 @@ public class User implements UserDetails {
         this.friendshipInvitesList = friendshipInvitesList;
     }
 
-    public List<Post> getPosts() {
+    public List<PostDTO> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<Post> posts) {
+    public void setPosts(List<PostDTO> posts) {
         this.posts = posts;
     }
 

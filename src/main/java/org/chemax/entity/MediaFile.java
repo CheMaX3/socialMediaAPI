@@ -3,29 +3,29 @@ package org.chemax.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "images")
-public class Image {
+@Table(name = "mediafiles")
+public class MediaFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "image_id")
-    private Long imageId;
+    @Column(name = "file_id")
+    private Long fileId;
 
     @Column(name = "filename")
     private String filename;
 
     @Column(name = "content")
-    private Byte[] content;
+    private byte[] content;
 
     @Column(name = "post_id")
     private Long postId;
 
-    public Long getImageId() {
-        return imageId;
+    public Long getFileId() {
+        return fileId;
     }
 
-    public void setImageId(Long imageId) {
-        this.imageId = imageId;
+    public void setFileId(Long fileId) {
+        this.fileId = fileId;
     }
 
     public String getFilename() {
@@ -36,11 +36,11 @@ public class Image {
         this.filename = filename;
     }
 
-    public Byte[] getContent() {
+    public byte[] getContent() {
         return content;
     }
 
-    public void setContent(Byte[] content) {
+    public void setContent(byte[] content) {
         this.content = content;
     }
 

@@ -5,11 +5,11 @@ import javax.validation.constraints.Size;
 
 public class PostCreateRequest {
 
-    @NotNull
-    @Size(max = 255)
+    @NotNull(message = "Поле заголовок не может быть пустым")
+    @Size(max = 255, message = "Заголовок не может быть длиннее 255 символов")
     private String header;
 
-    @NotNull
+    @NotNull(message = "Нужно указать текст сообщения")
     private String message;
 
     @NotNull

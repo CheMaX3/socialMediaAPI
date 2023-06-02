@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -24,13 +27,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void createPost(PostCreateRequest postCreateRequest) {
+    public PostDTO createPost(PostCreateRequest postCreateRequest) {
+        PostDTO postDTO = new PostDTO();
         try {
-            postRepository.save(buildPostFromRequest(postCreateRequest));
+            postDTO = convertPostToPostDTO(postRepository.save(buildPostFromRequest(postCreateRequest)));
         }
         catch (Exception ex) {
             log.error("Can't save object " + postCreateRequest.toString());
         }
+        return postDTO;
     }
 
     @Override
@@ -55,16 +60,31 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void updatePostById(Long postId, PostUpdateRequest postUpdateRequest) {
+    public PostDTO updatePostById(Long postId, PostUpdateRequest postUpdateRequest) {
+        PostDTO postDTO = new PostDTO();
         try {
             Post postFromDB = postRepository.findById(postId).orElseThrow(EntityNotFoundException::new);
             postFromDB.setHeader(Optional.ofNullable(postUpdateRequest.getHeader()).orElse(postFromDB.getHeader()));
             postFromDB.setMessage(Optional.ofNullable(postUpdateRequest.getMessage()).orElse(postFromDB.getMessage()));
             postFromDB.setUpdatedDateTime(ZonedDateTime.now());
-            postRepository.save(postFromDB);
+            postDTO = convertPostToPostDTO(postRepository.save(postFromDB));
         } catch (Exception ex) {
             log.error("Can't save object with id=" + postId);
         }
+        return postDTO;
+    }
+
+    @Override
+    public List<PostDTO> getPostsByAuthorId(Long authorId) {
+        List<PostDTO> postList = new ArrayList<>();
+        try {
+            postList = postRepository.findByAuthorId(authorId).stream().map(this::convertPostToPostDTO)
+                    .collect(Collectors.toList());
+        }
+        catch (Exception ex) {
+            log.error("Can't retrieve objects from DB with authorId=" + authorId);
+        }
+        return postList;
     }
 
     private Post buildPostFromRequest(PostCreateRequest postCreateRequest) throws IOException {

@@ -4,13 +4,17 @@ import org.chemax.dto.PostDTO;
 import org.chemax.request.PostCreateRequest;
 import org.chemax.request.PostUpdateRequest;
 
+import java.util.List;
+
 public interface PostService {
 
-    void createPost(PostCreateRequest postCreateRequest);
+    PostDTO createPost(PostCreateRequest postCreateRequest);
 
     PostDTO getPostById(Long postId);
 
     void deletePostById(Long postId);
 
-    void updatePostById(Long postId, PostUpdateRequest postUpdateRequest);
+    PostDTO updatePostById(Long postId, PostUpdateRequest postUpdateRequest);
+
+    List<PostDTO> getPostsByAuthorId(Long authorId);
 }

@@ -1,12 +1,15 @@
 package org.chemax.controller;
 
 import org.chemax.dto.PostDTO;
+import org.chemax.entity.Post;
 import org.chemax.request.PostCreateRequest;
 import org.chemax.request.PostUpdateRequest;
 import org.chemax.service.PostServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class PostControllerImpl implements PostController {
@@ -18,9 +21,9 @@ public class PostControllerImpl implements PostController {
     }
 
     @Override
-    public ResponseEntity<Void> createPost(PostCreateRequest postCreateRequest) {
-        postService.createPost(postCreateRequest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<PostDTO> createPost(PostCreateRequest postCreateRequest) {
+        final PostDTO postDTO = postService.createPost(postCreateRequest);
+        return new ResponseEntity<>(postDTO, HttpStatus.CREATED);
     }
 
     @Override
@@ -36,8 +39,14 @@ public class PostControllerImpl implements PostController {
     }
 
     @Override
-    public ResponseEntity<Void> updatePostById(Long postId, PostUpdateRequest postUpdateRequest) {
-        postService.updatePostById(postId, postUpdateRequest);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<PostDTO> updatePostById(Long postId, PostUpdateRequest postUpdateRequest) {
+        final PostDTO postDTO = postService.updatePostById(postId, postUpdateRequest);
+        return new ResponseEntity<>(postDTO, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<PostDTO>> getPostsByAuthorId(Long authorId) {
+        final List<PostDTO> postList = postService.getPostsByAuthorId(authorId);
+        return new ResponseEntity<>(postList, HttpStatus.OK);
     }
 }
