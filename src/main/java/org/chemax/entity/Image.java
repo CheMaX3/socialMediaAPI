@@ -11,6 +11,9 @@ public class Image {
     @Column(name = "image_id")
     private Long imageId;
 
+    @Column(name = "filename")
+    private String filename;
+
     @Column(name = "content")
     private Byte[] content;
 
@@ -23,6 +26,14 @@ public class Image {
 
     public void setImageId(Long imageId) {
         this.imageId = imageId;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public Byte[] getContent() {

@@ -46,7 +46,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(UserCreateRequest userCreateRequest) {
         try {
-            userRepository.save(buildUserFromRequest(userCreateRequest));
+            if (!existUserCheck(userCreateRequest.getUsername())) {
+                userRepository.save(buildUserFromRequest(userCreateRequest));
+            }
         }
         catch (Exception ex) {
             log.error("Can't save object " + userCreateRequest.toString());
@@ -154,5 +156,19 @@ public class UserServiceImpl implements UserService {
 
     public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
+    private boolean existUserCheck(String username) {
+        boolean userExists = true;
+        try {
+            User userFromDB = userRepository.findByUsername(username);
+            if (userFromDB == null) {
+                userExists = false;
+            }
+        }
+        catch (Exception ex) {
+           log.error("Can't connect to DB");
+        }
+        return userExists;
     }
 }
