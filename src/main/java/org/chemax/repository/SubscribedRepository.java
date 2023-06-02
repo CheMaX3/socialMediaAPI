@@ -8,6 +8,8 @@ import java.util.List;
 
 @Repository
 public interface SubscribedRepository extends JpaRepository<Subscribed, Long> {
+
     Subscribed findByRequesterIdAndRequestedId(Long requesterId, Long requestedId);
+
     List<Subscribed> findByRequesterId(Long requesterId);
 }

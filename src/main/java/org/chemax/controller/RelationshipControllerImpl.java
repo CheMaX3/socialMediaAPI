@@ -38,7 +38,7 @@ public class RelationshipControllerImpl implements RelationshipController {
     }
 
     @Override
-    public ResponseEntity<Void> deleteAndUnsubscribeFromUserWithId(@RequestBody DeleteFriendRequest deleteFriendRequest) {
+    public ResponseEntity<Void> deleteAndUnsubscribeFromUserWithId(DeleteFriendRequest deleteFriendRequest) {
         relationshipService.deleteAndUnsubscribeFromRequestedUser(deleteFriendRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }

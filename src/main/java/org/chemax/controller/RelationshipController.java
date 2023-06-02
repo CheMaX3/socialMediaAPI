@@ -7,6 +7,8 @@ import org.chemax.request.FriendshipInviteRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+//TODO:Swagger annotations
+
 @RequestMapping(value = "/relationship")
 public interface RelationshipController {
 

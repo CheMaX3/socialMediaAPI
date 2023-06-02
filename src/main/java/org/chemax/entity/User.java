@@ -10,6 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -159,5 +160,34 @@ public class User implements UserDetails {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", friendList=" + friendList +
+                ", subscribersList=" + subscribersList +
+                ", subscribedList=" + subscribedList +
+                ", friendshipInvitesList=" + friendshipInvitesList +
+                ", posts=" + posts +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(userId, user.userId) && Objects.equals(username, user.username) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles) && Objects.equals(friendList, user.friendList) && Objects.equals(subscribersList, user.subscribersList) && Objects.equals(subscribedList, user.subscribedList) && Objects.equals(friendshipInvitesList, user.friendshipInvitesList) && Objects.equals(posts, user.posts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, username, email, password, roles, friendList, subscribersList, subscribedList, friendshipInvitesList, posts);
     }
 }

@@ -26,7 +26,9 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
 
     private static final Logger log = Logger.getLogger(PostServiceImpl.class.getName());
+
     private final PostRepository postRepository;
+
     private final SubscriberRepository subscriberRepository;
 
     public PostServiceImpl(PostRepository postRepository, SubscriberRepository subscriberRepository) {
@@ -118,6 +120,7 @@ public class PostServiceImpl implements PostService {
         builtPost.setMessage(postCreateRequest.getMessage());
         builtPost.setCreationDateTime(ZonedDateTime.now());
         builtPost.setAuthorId(postCreateRequest.getAuthorId());
+
         return builtPost;
     }
 
@@ -127,6 +130,7 @@ public class PostServiceImpl implements PostService {
         postDTO.setHeader(post.getHeader());
         postDTO.setMessage(post.getMessage());
         postDTO.setAuthorId(post.getAuthorId());
+
         return postDTO;
     }
 }

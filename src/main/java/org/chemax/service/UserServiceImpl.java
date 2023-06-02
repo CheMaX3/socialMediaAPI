@@ -27,12 +27,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     private static final Logger log = Logger.getLogger(UserServiceImpl.class.getName());
+
     private final UserRepository userRepository;
+
     private final FriendshipInviteRepository friendshipInviteRepository;
+
     private final FriendRepository friendRepository;
+
     private final SubscriberRepository subscriberRepository;
+
     private final SubscribedRepository subscribedRepository;
+
     private final RoleRepository roleRepository;
+
     private final PostService postService;
 
     public UserServiceImpl(UserRepository userRepository, FriendshipInviteRepository friendshipInviteRepository,
@@ -107,19 +114,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return allUsers;
     }
 
-    @Override
-    public List<Role> getAllRoles() {
-        List<Role> allRoles = new ArrayList<>();
-        try {
-            allRoles = roleRepository.findAll();
-        }
-        catch (Exception ex) {
-            log.error("Can't retrieve objects from DB");
-        }
-        return allRoles;
-    }
-
-
     private User buildUserFromRequest(UserCreateRequest userCreateRequest) {
         User builtUser = new User();
         builtUser.setUsername(userCreateRequest.getUsername());
@@ -127,6 +121,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         builtUser.setPassword(userCreateRequest.getPassword());
         builtUser.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         builtUser.setPassword(passwordEncoder.encode(userCreateRequest.getPassword()));
+
         return builtUser;
     }
 
@@ -139,6 +134,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userDTO.setSubscribersList(subscriberRepository.findByRequestedId(user.getUserId()));
         userDTO.setFriendshipInvitesList(friendshipInviteRepository.findFriendshipInvitesByRequestedId(user.getUserId()));
         userDTO.setPosts(postService.getPostsByAuthorId(user.getUserId()));
+
         return userDTO;
     }
 

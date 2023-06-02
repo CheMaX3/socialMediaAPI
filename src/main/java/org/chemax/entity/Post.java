@@ -3,6 +3,7 @@ package org.chemax.entity;
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "posts")
@@ -85,5 +86,31 @@ public class Post {
 
     public void setMediaFiles(List<MediaFile> mediaFiles) {
         this.mediaFiles = mediaFiles;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "postId=" + postId +
+                ", header='" + header + '\'' +
+                ", message='" + message + '\'' +
+                ", creationDateTime=" + creationDateTime +
+                ", updatedDateTime=" + updatedDateTime +
+                ", authorId=" + authorId +
+                ", mediaFiles=" + mediaFiles +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Post post = (Post) o;
+        return Objects.equals(postId, post.postId) && Objects.equals(header, post.header) && Objects.equals(message, post.message) && Objects.equals(creationDateTime, post.creationDateTime) && Objects.equals(updatedDateTime, post.updatedDateTime) && Objects.equals(authorId, post.authorId) && Objects.equals(mediaFiles, post.mediaFiles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(postId, header, message, creationDateTime, updatedDateTime, authorId, mediaFiles);
     }
 }

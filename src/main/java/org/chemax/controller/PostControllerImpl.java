@@ -54,6 +54,4 @@ public class PostControllerImpl implements PostController {
         final List<PostDTO> feed = postService.getFeedByUserId(userId);
         return new ResponseEntity<>(feed, HttpStatus.OK);
     }
-
-
 }

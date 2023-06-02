@@ -19,6 +19,4 @@ public interface UserService {
     void updateUserById(Long userId, UserUpdateRequest userUpdateRequest);
 
     List<User> getAllUsers();
-
-    List<Role> getAllRoles();
 }

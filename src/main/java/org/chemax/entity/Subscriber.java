@@ -1,6 +1,7 @@
 package org.chemax.entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "subscribers")
@@ -48,5 +49,18 @@ public class Subscriber {
                 ", requesterId=" + requesterId +
                 ", requestedId=" + requestedId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Subscriber that = (Subscriber) o;
+        return Objects.equals(id, that.id) && Objects.equals(requesterId, that.requesterId) && Objects.equals(requestedId, that.requestedId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, requesterId, requestedId);
     }
 }

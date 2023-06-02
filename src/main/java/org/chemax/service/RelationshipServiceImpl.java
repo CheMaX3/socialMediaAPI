@@ -11,9 +11,13 @@ import org.springframework.stereotype.Service;
 public class RelationshipServiceImpl implements RelationshipService {
 
     Logger log = Logger.getLogger(RelationshipServiceImpl.class.getName());
+
     private final SubscribedRepository subscribedRepository;
+
     private final FriendshipInviteRepository friendshipInviteRepository;
+
     private final FriendRepository friendRepository;
+
     private final SubscriberRepository subscriberRepository;
 
     public RelationshipServiceImpl(SubscribedRepository subscribedRepository,
@@ -42,14 +46,17 @@ public class RelationshipServiceImpl implements RelationshipService {
     public Friend makeUsersFriendsAndSubcribersByFriendshipInviteId(Long inviteId) {
         Friend requester = new Friend();
         Friend requested = new Friend();
+
         try {
             FriendshipInvite friendshipInvite = friendshipInviteRepository.getReferenceById(inviteId);
             requester.setRequesterId(friendshipInvite.getRequesterId());
             requester.setRequestedId(friendshipInvite.getRequestedId());
             friendRepository.save(requester);
+
             requested.setRequesterId(friendshipInvite.getRequestedId());
             requested.setRequestedId(friendshipInvite.getRequesterId());
             friendRepository.save(requested);
+
             friendshipInviteRepository.deleteById(inviteId);
             subscribeToUserWithUserId(friendshipInvite.getRequestedId(), friendshipInvite.getRequesterId());
         }
@@ -90,16 +97,19 @@ public class RelationshipServiceImpl implements RelationshipService {
         FriendshipInvite builtFriendshipInvite = new FriendshipInvite();
         builtFriendshipInvite.setRequesterId(friendshipInviteRequest.getRequesterId());
         builtFriendshipInvite.setRequestedId(friendshipInviteRequest.getRequestedId());
+
         return builtFriendshipInvite;
     }
 
     private void subscribeToUserWithUserId(Long requesterId, Long requestedId) {
         Subscriber subscriber = new Subscriber();
         Subscribed subscribed = new Subscribed();
+
         try {
             subscriber.setRequesterId(requesterId);
             subscriber.setRequestedId(requestedId);
             subscriberRepository.save(subscriber);
+
             subscribed.setRequesterId(requestedId);
             subscribed.setRequestedId(requesterId);
             subscribedRepository.save(subscribed);

@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface FriendshipInviteRepository extends JpaRepository<FriendshipInvite, Long> {
+
     List<FriendshipInvite> findFriendshipInvitesByRequestedId(Long requestedId);
 }

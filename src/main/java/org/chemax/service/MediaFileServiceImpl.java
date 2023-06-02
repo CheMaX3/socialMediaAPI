@@ -12,6 +12,7 @@ import java.io.IOException;
 public class MediaFileServiceImpl implements MediaFileService {
 
     private static final Logger log = Logger.getLogger(MediaFileServiceImpl.class.getName());
+
     private final MediaFileRepository mediaFileRepository;
 
     public MediaFileServiceImpl(MediaFileRepository mediaFileRepository) {
@@ -35,6 +36,7 @@ public class MediaFileServiceImpl implements MediaFileService {
         builtMediaFile.setFilename(mediaFileCreateRequest.getFilename());
         builtMediaFile.setContent(mediaFileCreateRequest.getContent().getBytes());
         builtMediaFile.setPostId(mediaFileCreateRequest.getPostId());
+
         return builtMediaFile;
     }
 }

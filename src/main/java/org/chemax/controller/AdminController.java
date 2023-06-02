@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//TODO:Swagger annotations
+
 @RequestMapping("/admin/user")
 public interface AdminController {
 

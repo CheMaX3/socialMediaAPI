@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//TODO:Swagger annotations
+
 @RequestMapping(value = "/post")
 public interface PostController {
 
