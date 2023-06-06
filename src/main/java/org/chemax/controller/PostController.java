@@ -30,5 +30,7 @@ public interface PostController {
     ResponseEntity<List<PostDTO>> getPostsByAuthorId(@RequestParam Long authorId);
 
     @GetMapping(value = "get_feed")
-    ResponseEntity<List<PostDTO>> getFeedByUserId(@RequestParam Long userId);
+    ResponseEntity<List<PostDTO>> getFeedByUserId(@RequestParam Long userId,
+                                                  @RequestParam Integer pageNumber,
+                                                  @RequestParam Integer postCount);
 }
