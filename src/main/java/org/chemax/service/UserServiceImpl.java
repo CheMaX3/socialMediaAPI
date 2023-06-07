@@ -7,24 +7,19 @@ import org.chemax.entity.User;
 import org.chemax.repository.*;
 import org.chemax.request.UserCreateRequest;
 import org.chemax.request.UserUpdateRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     private static final Logger log = Logger.getLogger(UserServiceImpl.class.getName());
 
@@ -38,20 +33,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final SubscribedRepository subscribedRepository;
 
-    private final RoleRepository roleRepository;
-
     private final PostService postService;
 
-    public UserServiceImpl(UserRepository userRepository, FriendshipInviteRepository friendshipInviteRepository,
+    public UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, FriendshipInviteRepository friendshipInviteRepository,
                            FriendRepository friendRepository, SubscriberRepository subscriberRepository,
-                           SubscribedRepository subscribedRepository, RoleRepository roleRepository,
-                           PostService postService) {
+                           SubscribedRepository subscribedRepository, PostService postService) {
+        this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.friendshipInviteRepository = friendshipInviteRepository;
         this.friendRepository = friendRepository;
         this.subscriberRepository = subscriberRepository;
         this.subscribedRepository = subscribedRepository;
-        this.roleRepository = roleRepository;
         this.postService = postService;
     }
 
@@ -149,4 +141,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         return user;
     }
+
+
 }

@@ -7,6 +7,7 @@ import org.chemax.request.UserCreateRequest;
 import org.chemax.request.UserUpdateRequest;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
 
