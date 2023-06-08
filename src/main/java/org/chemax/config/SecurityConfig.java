@@ -32,7 +32,7 @@ public class SecurityConfig {
                     .hasAnyRole("ADMIN")
                     .antMatchers("/user/**", "/media/**", "/post/**", "/relationship/**")
                     .hasAnyRole("USER", "ADMIN")
-                    .antMatchers("/login/**", "/registration/**")
+                    .antMatchers("/login/**", "/registration/**", "/swagger-ui/**", "/v3/**")
                     .permitAll()
                     .anyRequest()
                     .authenticated()
@@ -41,7 +41,6 @@ public class SecurityConfig {
                 .and()
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
         return http.build();
     }
 }

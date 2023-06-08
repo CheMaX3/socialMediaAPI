@@ -1,15 +1,22 @@
 package org.chemax.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 
+@Schema(description = "Запрос на сохранение медиафайла в базе")
 public class MediaFileCreateRequest {
 
+    @Schema(description = "Имя файла")
     @NotNull
     private String filename;
+
+    @Schema(description = "Сериализуемый медиафайл")
     @NotNull
     private MultipartFile content;
+
+    @Schema(description = "Id поста, к которому прикрепляется медиафайл")
     @NotNull
     private Long postId;
 

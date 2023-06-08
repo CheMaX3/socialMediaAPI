@@ -38,20 +38,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final SubscribedRepository subscribedRepository;
 
-    private final RoleRepository roleRepository;
-
     private final PostService postService;
 
     public UserServiceImpl(UserRepository userRepository, FriendshipInviteRepository friendshipInviteRepository,
                            FriendRepository friendRepository, SubscriberRepository subscriberRepository,
-                           SubscribedRepository subscribedRepository, RoleRepository roleRepository,
-                           PostService postService) {
+                           SubscribedRepository subscribedRepository, PostService postService) {
         this.userRepository = userRepository;
         this.friendshipInviteRepository = friendshipInviteRepository;
         this.friendRepository = friendRepository;
         this.subscriberRepository = subscriberRepository;
         this.subscribedRepository = subscribedRepository;
-        this.roleRepository = roleRepository;
         this.postService = postService;
     }
 

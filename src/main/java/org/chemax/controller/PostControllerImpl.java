@@ -50,8 +50,8 @@ public class PostControllerImpl implements PostController {
     }
 
     @Override
-    public ResponseEntity<List<PostDTO>> getFeedByUserId(Long userId) {
-        final List<PostDTO> feed = postService.getFeedByUserId(userId);
+    public ResponseEntity<List<PostDTO>> getFeedByUserId(Long userId, Integer pageNumber, Integer postCount) {
+        final List<PostDTO> feed = postService.getFeedByUserId(userId, pageNumber, postCount);
         return new ResponseEntity<>(feed, HttpStatus.OK);
     }
 }

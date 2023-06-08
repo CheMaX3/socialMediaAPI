@@ -98,11 +98,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDTO> getFeedByUserId(Long userId) {
-        Pageable firstPageWithFiveElements = PageRequest
-                .of(0, 5, Sort.by("creationDateTime").descending());
+    public List<PostDTO> getFeedByUserId(Long userId, Integer pageNumber, Integer postCount) {
+        Pageable pageable = PageRequest
+                .of(pageNumber, postCount, Sort.by("creationDateTime").descending());
         List<Subscriber> subcriberList = subscriberRepository.findByRequesterId(userId);
-        List<Post> postList = postRepository.findAll();
+        Page<Post> postList = postRepository.findAll(pageable);
         List<Post> feed = new ArrayList<>();
         for (Post post : postList) {
             for (Subscriber subscriber : subcriberList) {
@@ -114,7 +114,7 @@ public class PostServiceImpl implements PostService {
         return feed.stream().map(this::convertPostToPostDTO).collect(Collectors.toList());
     }
 
-    private Post buildPostFromRequest(PostCreateRequest postCreateRequest) throws IOException {
+    private Post buildPostFromRequest(PostCreateRequest postCreateRequest) {
         Post builtPost = new Post();
         builtPost.setHeader(postCreateRequest.getHeader());
         builtPost.setMessage(postCreateRequest.getMessage());

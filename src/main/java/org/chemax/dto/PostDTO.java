@@ -1,10 +1,23 @@
 package org.chemax.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import javax.validation.constraints.Size;
+
+@Schema(description = "Сущность поста")
 public class PostDTO {
 
+    @Schema(description = "Id поста")
     private Long postId;
+
+    @Schema(description = "Заголовок поста")
+    @Size(max = 255, message = "Заголовок не может быть длиннее 255 символов")
     private String header;
+
+    @Schema(description = "Текст поста")
     private String message;
+
+    @Schema(description = "Id автора поста")
     private Long authorId;
 
     public Long getPostId() {

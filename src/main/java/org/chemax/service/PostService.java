@@ -18,5 +18,5 @@ public interface PostService {
 
     List<PostDTO> getPostsByAuthorId(Long authorId);
 
-    List<PostDTO> getFeedByUserId(Long userId);
+    List<PostDTO> getFeedByUserId(Long userId, Integer numberOfPage, Integer postCountOnPage);
 }
