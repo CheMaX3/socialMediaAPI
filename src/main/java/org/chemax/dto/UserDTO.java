@@ -1,17 +1,32 @@
 package org.chemax.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.chemax.entity.*;
 
 import java.util.List;
 
+@Schema(description = "DTO сущности пользователя")
 public class UserDTO  {
 
+    @Schema(description = "Id пользователя")
     private Long userId;
+
+    @Schema(description = "Имя пользователя/логин")
     private String username;
+
+    @Schema(description = "Лист друзей пользователя")
     private List<Friend> friendList;
+
+    @Schema(description = "Лист пользователей, на которых подписан пользователь")
     private List<Subscriber> subscribersList;
+
+    @Schema(description = "Лист пользователей, которые подписаны на пользователя")
     private List<Subscribed> subscribedList;
+
+    @Schema(description = "Лист приглашений в друзья пользователя")
     private List<FriendshipInvite> friendshipInvitesList;
+
+    @Schema(description = "Лист постов, автором которых является пользователь")
     private List<PostDTO> posts;
 
     public Long getUserId() {

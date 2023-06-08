@@ -1,12 +1,17 @@
 package org.chemax.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.validation.constraints.NotNull;
 
 public class FriendshipInviteRequest {
 
     @NotNull
+    @Schema(description = "Id пользователя, который отправляет приглашение в друзья")
     private Long requesterId;
+
     @NotNull
+    @Schema(description = "Id пользователя, которому отправляется приглашение в друзья")
     private Long requestedId;
 
     public Long getRequesterId() {

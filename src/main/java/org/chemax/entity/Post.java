@@ -1,6 +1,7 @@
 package org.chemax.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -14,6 +15,7 @@ public class Post {
     @Column(name = "post_id")
     private Long postId;
 
+    @Size(max = 255, message = "Заголовок не может быть длиннее 255 символов")
     @Column(name = "header")
     private String header;
 
