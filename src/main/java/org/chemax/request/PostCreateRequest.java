@@ -1,17 +1,23 @@
 package org.chemax.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@Schema(description = "Запрос на создание нового поста")
 public class PostCreateRequest {
 
-    @NotNull(message = "Поле заголовок не может быть пустым")
+    @Schema(description = "Заголовок поста")
+    @NotNull
     @Size(max = 255, message = "Заголовок не может быть длиннее 255 символов")
     private String header;
 
-    @NotNull(message = "Нужно указать текст сообщения")
+    @Schema(description = "Текст поста")
+    @NotNull
     private String message;
 
+    @Schema(description = "Id автора поста")
     @NotNull
     private Long authorId;
 

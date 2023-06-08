@@ -1,13 +1,23 @@
 package org.chemax.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
+@Schema(description = "Запрос на создание личного сообщения")
 public class MessageCreateRequest {
 
+    @Schema(description = "Текст отправляемого сообщения", example = "Привет. Как дела?")
+    @NotNull
     private String text;
 
+    @Schema(description = "Id пользователя, отправляющего сообщение")
+    @NotNull
     private Long senderId;
 
+    @Schema(description = "Id пользователя, получающего сообщение")
+    @NotNull
     private Long receiverId;
 
     public String getText() {
