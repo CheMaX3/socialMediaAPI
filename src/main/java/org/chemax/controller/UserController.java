@@ -18,5 +18,5 @@ public interface UserController {
     @GetMapping(value = "/get")
     ResponseEntity<UserDTO> getUserById(@RequestParam
                                         @Parameter(description = "Принимает Id пользователя, DTO которого нужно вернуть")
-                                        Long userId);
+                                        Long userId) throws Exception;
 }

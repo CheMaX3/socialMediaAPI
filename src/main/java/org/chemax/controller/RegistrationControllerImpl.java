@@ -1,5 +1,6 @@
 package org.chemax.controller;
 
+import org.chemax.dto.UserDTO;
 import org.chemax.request.UserCreateRequest;
 import org.chemax.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -16,8 +17,8 @@ public class RegistrationControllerImpl implements RegistrationController {
     }
 
     @Override
-    public ResponseEntity<Void> createUser(UserCreateRequest userCreateRequest) {
-        userService.createUser(userCreateRequest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<UserDTO> createUser(UserCreateRequest userCreateRequest) {
+        final UserDTO userDTO = userService.createUser(userCreateRequest);
+        return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 }
