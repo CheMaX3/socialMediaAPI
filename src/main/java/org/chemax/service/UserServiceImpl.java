@@ -5,16 +5,16 @@ import org.chemax.dto.UserDTO;
 import org.chemax.entity.Role;
 import org.chemax.entity.User;
 import org.chemax.exception.FieldCantBeEmptyException;
-import org.chemax.repository.*;
+import org.chemax.repository.UserRepository;
 import org.chemax.request.UserCreateRequest;
 import org.chemax.request.UserUpdateRequest;
+import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -27,26 +27,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
 
-    private final FriendshipInviteRepository friendshipInviteRepository;
+    private final FriendshipInviteService friendshipInviteService;
 
-    private final FriendRepository friendRepository;
+    private final FriendService friendService;
 
-    private final SubscriberRepository subscriberRepository;
+    private final SubscriberService subscriberService;
 
-    private final SubscribedRepository subscribedRepository;
+    private final SubscribedService subscribedService;
 
     private final PostService postService;
 
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, FriendshipInviteRepository friendshipInviteRepository,
-                           FriendRepository friendRepository, SubscriberRepository subscriberRepository,
-                           SubscribedRepository subscribedRepository, PostService postService, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, FriendshipInviteService friendshipInviteService,
+                           FriendService friendService, SubscriberService subscriberService,
+                           SubscribedService subscribedService, PostService postService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.friendshipInviteRepository = friendshipInviteRepository;
-        this.friendRepository = friendRepository;
-        this.subscriberRepository = subscriberRepository;
-        this.subscribedRepository = subscribedRepository;
+        this.friendshipInviteService = friendshipInviteService;
+        this.friendService = friendService;
+        this.subscriberService = subscriberService;
+        this.subscribedService = subscribedService;
         this.postService = postService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         catch (Exception ex) {
             log.error("Can't save object " + userCreateRequest.toString());
-            throw ex;
+            throw new DataSourceLookupFailureException("Can't save object");
         }
     }
 
@@ -71,12 +71,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return convertUserToUserDTO(userFromDB);
         }
         catch (Exception ex) {
-            log.error("Can't convert user with userId=" + userId);
-            throw ex;
+            log.error("Can't retrieve objects from DB");
+            throw new DataSourceLookupFailureException("Can't retrieve objects from DB");
         }
     }
 
-    //TODO:должны ли мы тут падать?
     @Override
     public void deleteUserById(Long userId) {
         try {
@@ -84,48 +83,50 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         catch (Exception ex) {
             log.error("User with userId=" + userId + " not exists");
+            throw new EntityNotFoundException("User with userId=" + userId + " not exists");
         }
     }
 
     @Override
-    public void updateUserById(Long userId, UserUpdateRequest userUpdateRequest) {
+    public UserDTO updateUserById(Long userId, UserUpdateRequest userUpdateRequest) {
         try {
             User userFromDB = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
             userFromDB.setUsername(Optional.ofNullable(userUpdateRequest.getUsername())
                     .orElse(userFromDB.getUsername()));
             userFromDB.setEmail(Optional.ofNullable(userUpdateRequest.getEmail()).orElse(userFromDB.getEmail()));
-            userFromDB.setPassword(Optional.ofNullable(userUpdateRequest.getPassword())
+            userFromDB.setPassword(Optional.ofNullable(passwordEncoder.encode(userUpdateRequest.getPassword()))
                     .orElse(userFromDB.getPassword()));
             userRepository.save(userFromDB);
+
+            return convertUserToUserDTO(userFromDB);
         } catch (Exception ex) {
-            log.error("Can't save object with userId=" + userId);
+            log.error("Can't find user with userId=" + userId);
+            throw new EntityNotFoundException("Can't find user with userId=" + userId);
         }
     }
 
     @Override
     public List<User> getAllUsers() {
-        List<User> allUsers = new ArrayList<>();
-            try {
-                allUsers = userRepository.findAll();
-            }
-            catch (Exception ex) {
-                log.error("Can't retrieve objects from DB");
-            }
-        return allUsers;
+        try {
+            return userRepository.findAll();
+        }
+        catch (Exception ex) {
+            log.error("Can't retrieve objects from DB");
+            throw new DataSourceLookupFailureException("Can't retrieve objects from DB");
+        }
     }
 
 
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        User user = new User();
         try {
-            user = userRepository.findByUsername(username);
+            return userRepository.findByUsername(username);
         }
         catch (Exception ex) {
             log.error("Can't find user with username=" + username);
+            throw new EntityNotFoundException("Can't find user with username=" + username);
         }
-        return user;
     }
 
     private User getUserEntityById(Long userId) {
@@ -134,7 +135,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         catch (Exception ex) {
             log.error("Can't find user with userId=" + userId);
-            throw ex;
+            throw new EntityNotFoundException("Can't find user with userId=" + userId);
         }
     }
 
@@ -158,15 +159,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     private UserDTO convertUserToUserDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUserId(user.getUserId());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setFriendList(friendRepository.findByRequesterId(user.getUserId()));
-        userDTO.setSubscribedList(subscribedRepository.findByRequesterId(user.getUserId()));
-        userDTO.setSubscribersList(subscriberRepository.findByRequestedId(user.getUserId()));
-        userDTO.setFriendshipInvitesList(friendshipInviteRepository.findFriendshipInvitesByRequestedId(user.getUserId()));
-        userDTO.setPosts(postService.getPostsByAuthorId(user.getUserId()));
+        try {
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUserId(Optional.ofNullable(user.getUserId()).orElseThrow(FieldCantBeEmptyException::new));
+            userDTO.setUsername(Optional.ofNullable(user.getUsername()).orElseThrow(FieldCantBeEmptyException::new));
+            userDTO.setFriendList(friendService.getFriendListByRequesterId(user.getUserId()));
+            userDTO.setSubscribedList(subscribedService.getSubscribedListByRequesterId(user.getUserId()));
+            userDTO.setSubscribersList(subscriberService.getSubscriberListByRequestedId(user.getUserId()));
+            userDTO.setFriendshipInvitesList(friendshipInviteService.getFriendshipInvitesListByRequestedId(user.getUserId()));
+            userDTO.setPosts(postService.getPostsByAuthorId(user.getUserId()));
 
-        return userDTO;
+            return userDTO;
+        } catch (Exception ex) {
+            log.error("Wrong user" + user.getUserId());
+            throw new FieldCantBeEmptyException();
+        }
     }
 }

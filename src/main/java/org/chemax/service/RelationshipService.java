@@ -1,17 +1,16 @@
 package org.chemax.service;
 
-import org.chemax.entity.Friend;
 import org.chemax.entity.FriendshipInvite;
-import org.chemax.request.FriendshipInviteRequest;
 import org.chemax.request.DeleteFriendRequest;
+import org.chemax.request.FriendshipInviteRequest;
 
 public interface RelationshipService {
 
     FriendshipInvite createFriendshipInviteAndSubscribe(FriendshipInviteRequest friendshipInviteRequest);
 
-    Friend makeUsersFriendsAndSubcribersByFriendshipInviteId(Long inviteId);
+    boolean makeUsersFriendsAndSubscribersByFriendshipInviteId(Long inviteId);
 
-    void deleteFrindshipInviteWithId(Long inviteId);
+    void deleteFriendshipInviteWithId(Long inviteId);
 
     void deleteAndUnsubscribeFromRequestedUser(DeleteFriendRequest deleteFriendRequest);
 }

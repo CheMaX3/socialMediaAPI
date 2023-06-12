@@ -1,6 +1,5 @@
 package org.chemax.config;
 
-import org.chemax.service.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -9,15 +8,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
 public class SecurityConfig {
-
-    private final UserServiceImpl userService;
-
-    private final PasswordEncoder passwordEncoder;
-
-    public SecurityConfig(UserServiceImpl userService, PasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

@@ -1,5 +1,6 @@
 package org.chemax.controller;
 
+import org.chemax.dto.UserDTO;
 import org.chemax.entity.User;
 import org.chemax.request.UserUpdateRequest;
 import org.chemax.service.UserService;
@@ -31,8 +32,8 @@ public class AdminControllerImpl implements AdminController {
     }
 
     @Override
-    public ResponseEntity<Void> updateUserById(Long userId, UserUpdateRequest userUpdateRequest) {
-        userService.updateUserById(userId, userUpdateRequest);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<UserDTO> updateUserById(Long userId, UserUpdateRequest userUpdateRequest) {
+        final UserDTO userDTO = userService.updateUserById(userId, userUpdateRequest);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 }

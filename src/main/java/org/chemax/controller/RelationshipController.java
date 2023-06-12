@@ -3,7 +3,6 @@ package org.chemax.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.chemax.entity.Friend;
 import org.chemax.entity.FriendshipInvite;
 import org.chemax.request.DeleteFriendRequest;
 import org.chemax.request.FriendshipInviteRequest;
@@ -28,7 +27,7 @@ public interface RelationshipController {
             ", он подписывается на пользователя, который отправил приглашение. Оба пользователя добавляются в лист " +
             "друзей друг друга, а приглашение в друзья удаляется из базы")
     @GetMapping(value = "/approve")
-    ResponseEntity<Friend> approveFriendshipInviteWithInviteId(@RequestParam
+    ResponseEntity<Boolean> approveFriendshipInviteWithInviteId(@RequestParam
                                                                @Parameter(description = "Id приглашения в друзья")
                                                                Long inviteId);
 

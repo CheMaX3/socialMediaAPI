@@ -3,6 +3,7 @@ package org.chemax.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.chemax.dto.UserDTO;
 import org.chemax.entity.User;
 import org.chemax.request.UserUpdateRequest;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +29,10 @@ public interface AdminController {
     @Operation(summary = "Внесение изменений",
                description = "Вносит изменения в экземпляр уже существующего пользователя")
     @PutMapping(value = "/update")
-    ResponseEntity<Void> updateUserById(@RequestParam
+    ResponseEntity<UserDTO> updateUserById(@RequestParam
                                         @Parameter(description = "Id пользователя в базе", required = true)
                                         Long userId,
-                                        @RequestBody
+                                           @RequestBody
                                         @Parameter(description = "Принимает json-объект, содержащий имя пользователя," +
                                                 " email и пароль", required = true)
                                         UserUpdateRequest userUpdateRequest);

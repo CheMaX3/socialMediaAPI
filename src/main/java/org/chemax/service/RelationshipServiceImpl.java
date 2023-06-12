@@ -2,10 +2,15 @@ package org.chemax.service;
 
 import org.apache.log4j.Logger;
 import org.chemax.entity.*;
+import org.chemax.exception.FieldCantBeEmptyException;
 import org.chemax.repository.*;
 import org.chemax.request.FriendshipInviteRequest;
 import org.chemax.request.DeleteFriendRequest;
+import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 
 @Service
 public class RelationshipServiceImpl implements RelationshipService {
@@ -31,23 +36,37 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Override
     public FriendshipInvite createFriendshipInviteAndSubscribe(FriendshipInviteRequest friendshipInviteRequest) {
-        FriendshipInvite friendshipInvite = new FriendshipInvite();
         try {
-            friendshipInvite = friendshipInviteRepository.save(buildFriendshipInviteFromRequest(friendshipInviteRequest));
+            FriendshipInvite friendshipInvite = buildFriendshipInviteFromRequest(friendshipInviteRequest);
+            friendshipInviteRepository.save(friendshipInvite);
             subscribeToUserWithUserId(friendshipInviteRequest.getRequesterId(), friendshipInviteRequest.getRequestedId());
+
+            return friendshipInvite;
+
         }
         catch (Exception ex) {
             log.error("Can't save object " + friendshipInviteRequest.toString());
+            throw new DataSourceLookupFailureException("Can't save object " + friendshipInviteRequest);
         }
-        return friendshipInvite;
     }
 
     @Override
-    public Friend makeUsersFriendsAndSubcribersByFriendshipInviteId(Long inviteId) {
-        Friend requester = new Friend();
-        Friend requested = new Friend();
-
+    public void deleteFriendshipInviteWithId(Long inviteId) {
         try {
+            friendshipInviteRepository.deleteById(inviteId);
+        }
+        catch (Exception ex) {
+            log.error("friendshipInvite with inviteId=" + inviteId + " not exists");
+            throw new EntityNotFoundException("friendshipInvite with inviteId=" + inviteId + " not exists");
+        }
+    }
+
+    @Override
+    public boolean makeUsersFriendsAndSubscribersByFriendshipInviteId(Long inviteId) {
+        try {
+            Friend requester = new Friend();
+            Friend requested = new Friend();
+
             FriendshipInvite friendshipInvite = friendshipInviteRepository.getReferenceById(inviteId);
             requester.setRequesterId(friendshipInvite.getRequesterId());
             requester.setRequestedId(friendshipInvite.getRequestedId());
@@ -59,20 +78,13 @@ public class RelationshipServiceImpl implements RelationshipService {
 
             friendshipInviteRepository.deleteById(inviteId);
             subscribeToUserWithUserId(friendshipInvite.getRequestedId(), friendshipInvite.getRequesterId());
-        }
-        catch (Exception ex) {
-            log.error("Can't save object " + requester);
-        }
-        return requester;
-    }
 
-    @Override
-    public void deleteFrindshipInviteWithId(Long inviteId) {
-        try {
-            friendshipInviteRepository.deleteById(inviteId);
+            return (friendRepository.findByRequesterIdAndRequestedId(requester.getRequesterId(),
+                    requested.getRequesterId()) != null);
         }
         catch (Exception ex) {
-            log.error("Can't delete object with id=" + inviteId);
+            log.error("Can't save object");
+            throw new DataSourceLookupFailureException("Can't save object");
         }
     }
 
@@ -90,22 +102,15 @@ public class RelationshipServiceImpl implements RelationshipService {
         }
         catch (Exception ex) {
             log.error("Can't delete objects");
+            throw new DataSourceLookupFailureException("Can't delete objects");
         }
     }
 
-    private FriendshipInvite buildFriendshipInviteFromRequest(FriendshipInviteRequest friendshipInviteRequest) {
-        FriendshipInvite builtFriendshipInvite = new FriendshipInvite();
-        builtFriendshipInvite.setRequesterId(friendshipInviteRequest.getRequesterId());
-        builtFriendshipInvite.setRequestedId(friendshipInviteRequest.getRequestedId());
-
-        return builtFriendshipInvite;
-    }
-
     private void subscribeToUserWithUserId(Long requesterId, Long requestedId) {
-        Subscriber subscriber = new Subscriber();
-        Subscribed subscribed = new Subscribed();
-
         try {
+            Subscriber subscriber = new Subscriber();
+            Subscribed subscribed = new Subscribed();
+
             subscriber.setRequesterId(requesterId);
             subscriber.setRequestedId(requestedId);
             subscriberRepository.save(subscriber);
@@ -115,7 +120,25 @@ public class RelationshipServiceImpl implements RelationshipService {
             subscribedRepository.save(subscribed);
         }
         catch (Exception ex) {
-            log.error("Can't save object " + subscriber + "\n" + subscribed);
+            log.error("Can't save objects");
+            throw new DataSourceLookupFailureException("Can't save objects");
+        }
+    }
+
+    private FriendshipInvite buildFriendshipInviteFromRequest(FriendshipInviteRequest friendshipInviteRequest) {
+        try {
+            FriendshipInvite builtFriendshipInvite = new FriendshipInvite();
+            builtFriendshipInvite.setRequesterId(Optional.ofNullable(friendshipInviteRequest.getRequesterId())
+                    .orElseThrow(FieldCantBeEmptyException::new));
+            builtFriendshipInvite.setRequestedId(Optional.ofNullable(friendshipInviteRequest.getRequestedId())
+                    .orElseThrow(FieldCantBeEmptyException::new));
+
+            return builtFriendshipInvite;
+
+        }
+        catch (Exception ex) {
+            log.error("Bad request " + friendshipInviteRequest.toString());
+            throw new FieldCantBeEmptyException();
         }
     }
 }

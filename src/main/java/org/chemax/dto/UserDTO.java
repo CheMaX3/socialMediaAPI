@@ -3,14 +3,17 @@ package org.chemax.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.chemax.entity.*;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Schema(description = "DTO сущности пользователя")
 public class UserDTO  {
 
+    @NotEmpty
     @Schema(description = "Id пользователя")
     private Long userId;
 
+    @NotEmpty
     @Schema(description = "Имя пользователя/логин")
     private String username;
 

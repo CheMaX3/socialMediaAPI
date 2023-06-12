@@ -1,13 +1,11 @@
 package org.chemax.controller;
 
-import org.chemax.entity.Friend;
 import org.chemax.entity.FriendshipInvite;
-import org.chemax.request.FriendshipInviteRequest;
 import org.chemax.request.DeleteFriendRequest;
+import org.chemax.request.FriendshipInviteRequest;
 import org.chemax.service.RelationshipService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,14 +24,14 @@ public class RelationshipControllerImpl implements RelationshipController {
     }
 
     @Override
-    public ResponseEntity<Friend> approveFriendshipInviteWithInviteId(Long inviteId) {
-        Friend friend = relationshipService.makeUsersFriendsAndSubcribersByFriendshipInviteId(inviteId);
-        return new ResponseEntity<>(friend, HttpStatus.OK);
+    public ResponseEntity<Boolean> approveFriendshipInviteWithInviteId(Long inviteId) {
+        final Boolean approved = relationshipService.makeUsersFriendsAndSubscribersByFriendshipInviteId(inviteId);
+        return new ResponseEntity<>(approved, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Void> declineFriendshipInviteWithInviteId(Long inviteId) {
-        relationshipService.deleteFrindshipInviteWithId(inviteId);
+        relationshipService.deleteFriendshipInviteWithId(inviteId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

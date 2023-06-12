@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 public class MessengerControllerImpl implements MessengerController {
 
-    private MessengerService messengerService;
+    private final MessengerService messengerService;
 
     public MessengerControllerImpl(MessengerService messengerService) {
         this.messengerService = messengerService;
